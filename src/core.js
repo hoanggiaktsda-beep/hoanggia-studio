@@ -3,10 +3,10 @@ import {resolveDepartment} from "./intelligence-core.js";
 /* HOANGGIA STUDIO — reusable deterministic intelligence layer. No external API or fake model inference. */
 export const VERSION="3.0.0";
 export const MODULES=[
-{id:"design",label:"Design AI",vi:"Thiết kế không gian",group:"creative",icon:"◈",status:"local",repo:"https://github.com/hoanggiaktsda-beep/hoanggia-ai-studio",detail:"Biên soạn định hướng kiến trúc, nội thất, quy hoạch, cảnh quan"},
+{id:"design",label:"Design AI",vi:"Thiết kế không gian",group:"creative",icon:"◈",status:"local",repo:"https://github.com/hoanggiaktsda-beep/da-studio",live:"https://hoanggiaktsda-beep.github.io/da-studio/",detail:"Biên soạn định hướng kiến trúc, nội thất, quy hoạch, cảnh quan"},
 {id:"edit",label:"Edit AI",vi:"Chỉnh sửa & đồng bộ",group:"creative",icon:"▧",status:"local",repo:"https://github.com/hoanggiaktsda-beep/hoanggia-studioai",live:"https://hoanggiaktsda-beep.github.io/hoanggia-studioai/",detail:"ReferenceReplica, SpaceSync, khóa kiến trúc và góc máy"},
-{id:"video",label:"Video AI",vi:"Kịch bản & camera",group:"creative",icon:"▷",status:"local",repo:"https://github.com/hoanggiaktsda-beep/prompt-ai-videos",detail:"Shot sequence, nhân vật, ánh sáng và chuyển động"},
-{id:"upscale",label:"Upscale AI",vi:"Nâng cấp ảnh",group:"creative",icon:"⬡",status:"local",repo:"https://github.com/hoanggiaktsda-beep/HG-UPSCALE-AI",detail:"Phóng ảnh trên trình duyệt, không tự nhận là AI siêu phân giải"},
+{id:"video",label:"Video AI",vi:"Kịch bản & camera",group:"creative",icon:"▷",status:"local",repo:"https://github.com/hoanggiaktsda-beep/prompt-ai-videos",live:"https://hoanggiaktsda-beep.github.io/prompt-ai-videos/",detail:"Shot sequence, nhân vật, ánh sáng và chuyển động"},
+{id:"upscale",label:"Upscale AI",vi:"Nâng cấp ảnh",group:"creative",icon:"⬡",status:"local",repo:"https://github.com/hoanggiaktsda-beep/HG-UPSCALE-AI",live:"https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/",detail:"Phóng ảnh trên trình duyệt, không tự nhận là AI siêu phân giải"},
 {id:"visual",label:"Visual AI",vi:"Trực quan hóa",group:"creative",icon:"◇",status:"planned",detail:"Chưa xác minh ứng dụng nguồn để kết nối"},
 {id:"plan",label:"Plan AI",vi:"Phân tích diện tích",group:"technical",icon:"▤",status:"local",detail:"Dữ liệu đo nhập thủ công, tính diện tích cơ bản"},
 {id:"material",label:"Material AI",vi:"Thư viện vật liệu",group:"technical",icon:"▦",status:"local",detail:"Bảng vật liệu tham chiếu, không phải dữ liệu nhà cung cấp"},

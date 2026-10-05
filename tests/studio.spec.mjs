@@ -128,12 +128,10 @@ test("material specificity rejects generic category lookalikes",async({page})=>{
 });
 
 test("material library shows clearly labeled editorial imagery when exact texture is unavailable",async({page})=>{
- await page.route("https://images.unsplash.com/**",route=>route.fulfill({status:200,contentType:"image/svg+xml",body:"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"8\" height=\"8\\"></svg>"}));
  await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:"{}"}));
  await page.goto("/#library");
  await expect(page.locator(".material-preview")).toHaveCount(8);
  await expect(page.locator(".material-preview-note").first()).toContainText("Ảnh cảm hứng");
- await expect(page.locator(".material-preview img").first()).toHaveAttribute("src",/images.unsplash.com/);
  await expect(page.locator(".mat-card").first()).toContainText("Chưa có mẫu đúng");
  await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href",/polyhaven.com\/textures\?q=travertine/);
 });

@@ -109,9 +109,20 @@ test("material library links external CC0 sources without local texture files",a
 });
 
 test("material card links to matching asset or filtered category",async({page})=>{
- await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({travertine_floor:{name:"Travertine Floor",tags:["travertine"]},marble_tiles:{name:"Marble Tiles",tags:["marble"]},oak_wood:{name:"Oak Wood",tags:["oak"]}})}));
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({travertine_floor:{name:"Travertine Floor",tags:["travertine"]},calacatta_marble:{name:"Calacatta Marble",tags:["calacatta","marble"]},oak_wood:{name:"Oak Wood",tags:["oak"]}})}));
  await page.goto("/#library");
  await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href","https://polyhaven.com/a/travertine_floor");
- await expect(page.locator('[data-material-link="1"]')).toHaveAttribute("href","https://polyhaven.com/a/marble_tiles");
+ await expect(page.locator('[data-material-link="1"]')).toHaveAttribute("href","https://polyhaven.com/a/calacatta_marble");
  await expect(page.locator('[data-material-link="3"]')).toHaveAttribute("href",/textures\?q=walnut/);
+});
+
+test("material specificity rejects generic category lookalikes",async({page})=>{
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({white_marble:{name:"White Marble",tags:["marble"]},generic_glass:{name:"Glass",tags:["glass"]},polished_brass:{name:"Brass Metal",tags:["brass"]},brown_leather:{name:"Brown Leather",tags:["leather"]}})}));
+ await page.goto("/#library");
+ await expect(page.locator('[data-material-link="1"]')).toHaveAttribute("href",/textures\?q=calacatta/);
+ await expect(page.locator('[data-material-link="4"]')).toHaveAttribute("href",/textures\?q=brushed/);
+ await expect(page.locator('[data-material-link="5"]')).toHaveAttribute("href",/textures\?q=saddle/);
+ await expect(page.locator('[data-material-link="7"]')).toHaveAttribute("href",/textures\?q=smoked/);
+ await expect(page.locator('.mat-card').nth(7)).toContainText("Chưa có mẫu đúng");
+ await expect(page.locator('.mat-card').nth(7).getByRole("link",{name:"Nguồn khác"})).toHaveAttribute("href",/ambientcg.com\/list\?search=smoked/);
 });

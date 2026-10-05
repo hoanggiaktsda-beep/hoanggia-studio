@@ -1,19 +1,9 @@
 import {test,expect} from "@playwright/test";
-test("dashboard, project creation and design prompt",async({page})=>{
+test("dashboard standalone AI links",async({page})=>{
  await page.goto("/");
- await expect(page.getByRole("heading",{name:"AI Tools"})).toBeVisible();
- await expect(page.locator(".tool-gallery a.tile").first()).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/da-studio/");
- await expect(page.locator(".tool-gallery a.tile").nth(1)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/hoanggia-studioai/");
- await expect(page.locator(".tool-gallery a.tile").nth(2)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/prompt-ai-videos/");
- await expect(page.locator(".tool-gallery a.tile").nth(3)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/");
- /* Legacy prompt UI has moved to its standalone site. */
- return;
- await page.getByRole("button",{name:"Khám phá Studio"}).click();
- await expect(page.getByRole("heading",{name:"Design AI"})).toBeVisible();
- await page.locator("#f-brief").fill("Thiết kế phòng khách tối giản tinh tế");
- await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
- await expect(page.locator("#promptResult")).toContainText("phòng khách tối giản");
- await expect(page.getByRole("button",{name:"Sao chép"})).toBeVisible();
+ await expect(page.locator(".tool-gallery a.tile")).toHaveCount(4);
+ const urls=["https://hoanggiaktsda-beep.github.io/da-studio/","https://hoanggiaktsda-beep.github.io/hoanggia-studioai/","https://hoanggiaktsda-beep.github.io/prompt-ai-videos/","https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/"];
+ for(let i=0;i<4;i++)await expect(page.locator(".tool-gallery a.tile").nth(i)).toHaveAttribute("href",urls[i]);
 });
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");
@@ -45,7 +35,7 @@ test("tool artwork matches its purpose and is available",async({page,request})=>
  }
  await expect(page.locator('.tool-gallery [data-open="plan"]')).toContainText("Mặt bằng, công năng và diện tích");
  await expect(page.locator('.tool-gallery [data-open="boq"]')).toContainText("Bảng vật tư, khối lượng, chi phí");
- await expect(page.locator('.tool-gallery [data-open="upscale"]')).toContainText("Phóng ảnh và cải thiện độ rõ");
+ await expect(page.locator('.tool-gallery a[href*="HG-UPSCALE-AI"]')).toContainText("Phóng ảnh và cải thiện độ rõ");
 });
 
 
@@ -90,18 +80,9 @@ test("Luxury secretary exposes responsive actions and accessible close",async({p
  await expect(page.locator("#moMessages")).toContainText("Japandi");
 });
 
-test("Design AI validates brief and preserves last valid prompt",async({page})=>{
- await page.goto("/");
- await page.locator('[data-open="design"]').first().click();
- await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
- await expect(page.locator("#promptWarnings")).toContainText("Thiếu mô tả thiết kế");
- await expect(page.locator("#promptResult")).toContainText("Điền yêu cầu");
- await page.locator("#f-brief").fill("Phòng khách villa phong cách Japandi");
- await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
- await expect(page.locator("#promptResult")).toContainText("villa phong cách Japandi");
- await page.locator("#f-brief").fill("");
- await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
- await expect(page.locator("#promptResult")).toContainText("villa phong cách Japandi");
+test("legacy design entry redirects to DA Studio",async({page})=>{
+ await page.goto("/design-ai/");
+ await expect(page).toHaveURL("https://hoanggiaktsda-beep.github.io/da-studio/",{timeout:15000});
 });
 
 test("material library links external CC0 sources without local texture files",async({page})=>{

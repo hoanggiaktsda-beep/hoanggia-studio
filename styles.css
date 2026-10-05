@@ -178,3 +178,9 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 /* Editorial material-library cards, no bundled imagery */
 .mat-card .material-preview{height:156px;min-height:156px;background-size:cover;box-shadow:inset 0 -40px 35px -30px #05080d}.mat-card .material-preview img{transition:transform .4s ease;filter:saturate(.85) contrast(1.04)}.mat-card:hover .material-preview img{transform:scale(1.035)}.mat-card .material-preview-note{bottom:9px;left:9px;max-width:calc(100% - 18px);font-size:10px;padding:5px 8px;background:#080e15db;border:1px solid #c7a36e66}
 @media(max-width:600px){.mat-card .material-preview{height:140px;min-height:140px}}
+
+/* Material specifications: readable at desktop and mobile sizes */
+.mat-card .material-definition{font-size:12px;line-height:1.55;color:#e1e5e8;margin:9px 0}
+.mat-card .material-application,.mat-card .material-caution{font-size:11px;line-height:1.5;color:#aebdca;margin:6px 0}
+.mat-card .material-application b,.mat-card .material-caution b{color:#e1bf85;font-weight:650}
+.mat-card .button-row{margin-top:12px}

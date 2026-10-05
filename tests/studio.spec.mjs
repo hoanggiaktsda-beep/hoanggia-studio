@@ -27,3 +27,17 @@ test("mobile navigation",async({page})=>{
  await page.locator(".mobile-nav").getByRole("button",{name:"Sáng tạo"}).click();
  await expect(page.getByRole("heading",{name:"Xưởng sáng tạo"})).toBeVisible();
 });
+
+test("tool artwork matches its purpose and is available",async({page,request})=>{
+ await page.goto("/");
+ for(const id of ["design","edit","video","upscale","visual","plan","material","boq","vision","expert"]){
+   const res=await request.get("/assets/tools/"+id+".svg");
+   expect(res.ok()).toBeTruthy();
+   const xml=await res.text();
+   expect(xml).toContain("<svg");
+   expect(xml).toContain("</svg>");
+ }
+ await expect(page.locator('.tool-gallery [data-open="plan"]')).toContainText("Mặt bằng, công năng và diện tích");
+ await expect(page.locator('.tool-gallery [data-open="boq"]')).toContainText("Bảng vật tư, khối lượng, chi phí");
+ await expect(page.locator('.tool-gallery [data-open="upscale"]')).toContainText("Phóng ảnh và cải thiện độ rõ");
+});

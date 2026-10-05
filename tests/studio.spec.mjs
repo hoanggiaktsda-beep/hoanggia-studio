@@ -43,15 +43,15 @@ test("tool artwork matches its purpose and is available",async({page,request})=>
 });
 
 
-test("Mỡ companion supports free local chat and Google handoff",async({page})=>{
+test("Thư ký AI companion supports free local chat and Google handoff",async({page})=>{
  await page.goto("/");
- await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();
  await expect(page.getByText("Trợ lý hướng dẫn theo kịch bản")).toBeVisible();
  await page.locator("#moInput").fill("cách tạo dự án");
  await page.locator("#moForm button").click();
  await expect(page.locator("#moMessages")).toContainText("Dự án mới");
  await page.reload();
- await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();
  await expect(page.locator("#moMessages")).toContainText("cách tạo dự án");
  await page.locator("#moInput").fill("Tìm kiếm trên Google");
  await page.locator("#moForm button").click();
@@ -59,11 +59,13 @@ test("Mỡ companion supports free local chat and Google handoff",async({page})=
  await page.getByRole("button",{name:"Xóa lịch sử chat"}).click();
  await expect(page.locator("#moMessages")).not.toContainText("cách tạo dự án");
 });
-test("Mỡ companion stays usable on mobile",async({page})=>{
+test("Thư ký AI companion stays usable on mobile",async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto("/");
- await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();
  await expect(page.locator("#moInput")).toBeVisible();
  await page.keyboard.press("Escape");
  await expect(page.locator("#moPanel")).toBeHidden();
 });
+
+test("Public chat uses the HOANGGIA AI logo for sender avatar",async({page})=>{await page.goto("/");await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();await page.locator("#moInput").fill("Xin chào");await page.locator("#moForm button").click();await expect(page.locator(".mo-user-avatar")).toHaveAttribute("src","./assets/icon.svg");await expect(page.locator(".mo-heading")).toContainText("THƯ KÝ AI");});

@@ -3,7 +3,7 @@ import {VERSION,MODULES,SPACES,STYLES,EXPERTS,MATERIALS,newProject,safeText,vali
 const $=s=>document.querySelector(s),view=$("#view"),KEY="hg-studio-projects-v1",ACTIVE="hg-studio-active-v1";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let storeOk=true,projects=[],active="",route="home",moduleId="design",visionFile=null,upscaleFile=null,visionData=null,upscaleUrl=null,toastTimer=null;
-function seed(){try{let raw=JSON.parse(localStorage.getItem(KEY)||"[]");projects=Array.isArray(raw)?raw.filter(validateProject).slice(0,80):[];active=localStorage.getItem(ACTIVE)||"";}catch(e){storeOk=undefined;projects=[];}if(!projects.length){projects=[newProject("Dự án đầu tiên")];save();}if(!projects.some(p=>p.id===active))active=projects[0].id;}
+function seed(){try{let raw=JSON.parse(localStorage.getItem(KEY)||"[]");projects=Array.isArray(raw)?raw.filter(validateProject).slice(0,80):[];active=localStorage.getItem(ACTIVE)||"";}catch(e){storeOk=false;projects=[];}if(!projects.length){projects=[newProject("Dự án đầu tiên")];save();}if(!projects.some(p=>p.id===active))active=projects[0].id;}
 function project(){return projects.find(p=>p.id===active)||projects[0];}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(projects));localStorage.setItem(ACTIVE,active);storeOk=true;}catch(e){storeOk=false;notify("Bộ nhớ đầy hoặc bị chặn. Hãy xuất bản sao JSON.");}}
 function touch(){project().updated=new Date().toISOString();save();}

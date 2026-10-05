@@ -123,7 +123,7 @@ test("material specificity rejects generic category lookalikes",async({page})=>{
  await expect(page.locator('[data-material-link="4"]')).toHaveAttribute("href",/textures\?q=brushed/);
  await expect(page.locator('[data-material-link="5"]')).toHaveAttribute("href",/textures\?q=saddle/);
  await expect(page.locator('[data-material-link="7"]')).toHaveAttribute("href",/textures\?q=smoked/);
- await expect(page.locator('.mat-card').nth(7)).toContainText("Chưa có mẫu đúng");
+ await expect(page.locator('.mat-card').nth(7)).toContainText("Chưa có mẫu xác thực");
  await expect(page.locator('.mat-card').nth(7).getByRole("link",{name:"Nguồn khác"})).toHaveAttribute("href",/ambientcg.com\/list\?search=smoked/);
 });
 
@@ -131,7 +131,7 @@ test("material library shows clearly labeled editorial imagery when exact textur
  await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:"{}"}));
  await page.goto("/#library");
  await expect(page.locator(".material-preview")).toHaveCount(8);
- await expect(page.locator(".material-preview-note").first()).toContainText("Không xác nhận vật liệu");
+ await expect(page.locator(".material-preview-note").first()).toContainText("Mô phỏng 3D");
  await expect(page.locator(".mat-card").first()).toContainText("Chưa có mẫu đúng");
  await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href",/polyhaven.com\/textures\?q=travertine/);
 });
@@ -147,4 +147,13 @@ test("material descriptions identify the actual material and installation concer
  await expect(page.locator(".mat-card").nth(7)).toContainText("kính cường lực");
  await expect(page.locator(".material-application")).toHaveCount(8);
  await expect(page.locator(".material-caution")).toHaveCount(8);
+});
+
+test("materials render simple 3D specimens, not unrelated interior photos",async({page})=>{
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:"{}"}));
+ await page.goto("/#library");
+ await expect(page.locator(".material-tile")).toHaveCount(8);
+ await expect(page.locator(".material-preview img")).toHaveCount(0);
+ await expect(page.locator(".material-sample-0")).toBeVisible();
+ await expect(page.locator(".material-sample-7")).toBeVisible();
 });

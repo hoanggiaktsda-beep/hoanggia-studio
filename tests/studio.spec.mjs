@@ -11,7 +11,7 @@ test("dashboard, project creation and design prompt",async({page})=>{
 });
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");
- await page.getByRole("button",{name:"Mở Workspace"}).nth(5).click();
+ await page.locator(".tool-gallery [data-open=plan]").click();
  await expect(page.getByRole("heading",{name:"Plan AI"})).toBeVisible();
  await page.locator("#widthM").fill("5");
  await page.locator("#heightM").fill("6");

@@ -15,14 +15,15 @@ export const SPACES=["Nội thất","Kiến trúc","Quy hoạch","Cảnh quan"];
 export const STYLES=["Minimal Luxury","Contemporary","Modern","Neo Classic","Wabi-Sabi","Japandi","Luxury","Bauhaus","Biophilic","Tropical Coastal","Industrial","Classic"];
 export const EXPERTS=["Furniture / Citterio","Material / Zumthor","Lighting / Ingo Maurer","Camera / Iwan Baan","Removal","AspectRatio","ReferenceReplica","SpaceSync","Storyboard"];
 export const MATERIALS=[
-{name:"Travertine",type:"Đá tự nhiên",color:"#b9ab91",properties:"Vân rỗng đặc trưng; cân nhắc chống thấm và hoàn thiện bề mặt."},
-{name:"Calacatta",type:"Đá marble",color:"#e2ddd0",properties:"Vân biến thiên theo từng tấm; kiểm tra mẫu thực."},
-{name:"Oak Veneer",type:"Gỗ veneer",color:"#a78761",properties:"Kiểm soát chiều vân, lớp phủ và độ ẩm."},
-{name:"Walnut",type:"Gỗ veneer",color:"#634736",properties:"Sắc nâu trầm; cần mẫu đồng nhất theo lô."},
-{name:"Brushed Brass",type:"Kim loại",color:"#ae9568",properties:"Cần chỉ định lớp phủ, chống oxy hóa và vết tay."},
-{name:"Saddle Leather",type:"Da",color:"#795743",properties:"Xác minh nguồn da, cách bảo dưỡng và chống ẩm."},
-{name:"Linen",type:"Vải",color:"#c9c0aa",properties:"Kiểm tra độ bền mài mòn và chống bám bẩn."},
-{name:"Smoked Glass",type:"Kính",color:"#66716a",properties:"Cân nhắc độ truyền sáng, an toàn và độ dày."}];
+{name:"Travertine",type:"ĐÁ TRAVERTINE · ĐÁ VÔI",color:"#b9ab91",properties:"Đá vôi tự nhiên màu kem–be, có lỗ rỗng và vân phân lớp; bề mặt có thể trám lỗ, mài honed hoặc đánh bóng.",application:"Ốp tường, sàn, bàn và chi tiết trang trí.",caution:"Kiểm tra độ hút nước, khả năng chống ố và mẫu tấm thực tế."},
+{name:"Calacatta",type:"ĐÁ MARBLE · CALACATTA",color:"#e2ddd0",properties:"Marble nền trắng sáng, vân lớn màu xám hoặc vàng; Calacatta là nhóm đá có nhiều biến thể, không phải mọi marble trắng.",application:"Mặt bàn, vách điểm nhấn, sàn và phòng tắm.",caution:"Kiểm tra nguồn đá, vân theo slab, chống axit và chống thấm."},
+{name:"Oak Veneer",type:"GỖ LẠNG · VENEER SỒI",color:"#a78761",properties:"Lớp gỗ sồi tự nhiên lạng mỏng phủ lên cốt ván; vân thẳng hoặc núi, màu vàng nhạt đến nâu mật ong.",application:"Cánh tủ, ốp vách, nội thất gỗ và cửa.",caution:"Chỉ định cốt ván, chiều vân, độ dày veneer và lớp sơn phủ."},
+{name:"Walnut",type:"GỖ LẠNG · VENEER ÓC CHÓ",color:"#634736",properties:"Veneer óc chó có nền nâu chocolate đến nâu tím, vân sọc hoặc cuộn; không đồng nhất với veneer sồi nhuộm nâu.",application:"Tủ áo, vách trang trí, bàn và hệ nội thất.",caution:"Kiểm tra mẫu veneer thật, ghép vân và sai lệch màu theo lô."},
+{name:"Brushed Brass",type:"KIM LOẠI · ĐỒNG XƯỚC",color:"#ae9568",properties:"Bề mặt màu đồng vàng có các đường xước mịn theo một hướng; có thể là đồng thật hoặc thép phủ màu đồng.",application:"Nẹp, tay nắm, khung trang trí và chân bàn.",caution:"Phân biệt vật liệu nền, phương pháp mạ/PVD, lớp bảo vệ và chống oxy hóa."},
+{name:"Saddle Leather",type:"DA · DA YÊN NGỰA",color:"#795743",properties:"Da thuộc tương đối dày, giữ phom, bề mặt có hạt hoặc mịn, thường có sắc nâu ấm; không đồng nghĩa với mọi loại da màu nâu.",application:"Bọc ghế, đầu giường, tay nắm và ốp trang trí.",caution:"Kiểm tra da thật hay nhân tạo, độ dày, hoàn thiện và độ bền màu."},
+{name:"Linen",type:"VẢI · LANH TỰ NHIÊN",color:"#c9c0aa",properties:"Vải từ sợi lanh có thớ dệt rõ, bề mặt mộc, thoáng và dễ nhăn; có thể pha cotton hoặc polyester.",application:"Rèm, vải bọc ghế, gối và phụ kiện.",caution:"Xác minh thành phần sợi, độ co rút, độ bền mài mòn và khả năng vệ sinh."},
+{name:"Smoked Glass",type:"KÍNH · KÍNH MÀU KHÓI",color:"#66716a",properties:"Kính có sắc xám khói hoặc nâu khói, vẫn cho ánh sáng truyền qua; khác kính trong, kính mờ phun cát và gương màu.",application:"Cánh tủ, vách kính, mặt bàn và kệ trưng bày.",caution:"Xác định kính cường lực/dán an toàn, độ dày, màu và độ truyền sáng."}
+];
 export function newProject(name="Dự án không tên"){return {schemaVersion:1,id:"hg-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),name,space:"Nội thất",created:new Date().toISOString(),updated:new Date().toISOString(),notes:"",data:{},history:[]};}
 export function safeText(s,max=5000){return String(s??"").replace(/[\u0000-\u001f\u007f]/g," ").trim().slice(0,max);}
 export function validateProject(p){return !!p&&typeof p==="object"&&p.schemaVersion===1&&typeof p.id==="string"&&p.id.length<=100&&typeof p.name==="string"&&p.name.length<=200&&!!p.data&&typeof p.data==="object"&&!Array.isArray(p.data)&&Array.isArray(p.history)&&p.history.length<=200;}

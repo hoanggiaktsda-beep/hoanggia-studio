@@ -19,4 +19,12 @@
 <footer class="foot"><span>HOANGGIA STUDIO © 2026</span><span>Tư duy có cơ sở. Thiết kế có mục đích. Diễn họa có kiểm soát.</span><span id="footerStatus">Tất cả dữ liệu dự án nằm trong trình duyệt</span></footer></div>
 <nav class="mobile-nav" aria-label="Điều hướng di động"><button data-route="home">⌂<small>Tổng quan</small></button><button data-route="creative">◈<small>Sáng tạo</small></button><button data-route="intelligence">✳<small>Trí tuệ</small></button><button data-route="projects">▧<small>Dự án</small></button><button data-route="system">⌘<small>Hệ thống</small></button></nav>
 </div><div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="./src/app.js"></script><script defer src="./src/mo-chat.js"></script></body></html>
+<script>
+/* Chuyển thẳng Design AI đến DA Studio, kể cả khi còn giao diện cũ trong bộ nhớ. */
+document.addEventListener("click",function(e){
+ const tile=e.target.closest('[data-open="design"],a[href*="/design-ai/"],a[href*="/da-studio/"]');
+ if(!tile)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ location.assign("https://hoanggiaktsda-beep.github.io/da-studio/");
+},true);
+</script><script type="module" src="./src/app.js?v=4.3.9"></script><script defer src="./src/mo-chat.js"></script></body></html>

@@ -4,7 +4,7 @@ import {readFileSync} from "node:fs";
 const read=p=>readFileSync(new URL("../"+p,import.meta.url),"utf8");
 test("Design AI is native and does not use iframe",()=>{
  const app=read("src/app.js");
- assert.match(app,/location\.assign\("\.\/design-ai\/"\)/);
+ assert.match(app,/location\.assign\("https:\/\/hoanggiaktsda-beep\.github\.io\/da-studio\/"\)/);
  assert.match(read("design-ai/index.html"),/src="\.\/app\.mjs"/);
  assert.doesNotMatch(read("design-ai/index.html"),/<iframe\b/i);
 });

@@ -83,3 +83,17 @@ test("Luxury secretary exposes responsive actions and accessible close",async({p
  await page.locator("#moForm button").click();
  await expect(page.locator("#moMessages")).toContainText("Japandi");
 });
+
+test("Design AI validates brief and preserves last valid prompt",async({page})=>{
+ await page.goto("/");
+ await page.locator('[data-open="design"]').first().click();
+ await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
+ await expect(page.locator("#promptWarnings")).toContainText("Thiếu mô tả thiết kế");
+ await expect(page.locator("#promptResult")).toContainText("Điền yêu cầu");
+ await page.locator("#f-brief").fill("Phòng khách villa phong cách Japandi");
+ await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
+ await expect(page.locator("#promptResult")).toContainText("villa phong cách Japandi");
+ await page.locator("#f-brief").fill("");
+ await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
+ await expect(page.locator("#promptResult")).toContainText("villa phong cách Japandi");
+});

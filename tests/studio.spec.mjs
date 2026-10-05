@@ -41,3 +41,29 @@ test("tool artwork matches its purpose and is available",async({page,request})=>
  await expect(page.locator('.tool-gallery [data-open="boq"]')).toContainText("Bảng vật tư, khối lượng, chi phí");
  await expect(page.locator('.tool-gallery [data-open="upscale"]')).toContainText("Phóng ảnh và cải thiện độ rõ");
 });
+
+
+test("Mỡ companion supports free local chat and Google handoff",async({page})=>{
+ await page.goto("/");
+ await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await expect(page.getByText("Trợ lý hướng dẫn theo kịch bản")).toBeVisible();
+ await page.locator("#moInput").fill("cách tạo dự án");
+ await page.locator("#moForm button").click();
+ await expect(page.locator("#moMessages")).toContainText("Dự án mới");
+ await page.reload();
+ await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await expect(page.locator("#moMessages")).toContainText("cách tạo dự án");
+ await page.locator("#moInput").fill("Tìm kiếm trên Google");
+ await page.locator("#moForm button").click();
+ await expect(page.locator("#moMessages")).toContainText("tìm");
+ await page.getByRole("button",{name:"Xóa lịch sử chat"}).click();
+ await expect(page.locator("#moMessages")).not.toContainText("cách tạo dự án");
+});
+test("Mỡ companion stays usable on mobile",async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto("/");
+ await page.getByRole("button",{name:"Mở trò chuyện với Mỡ"}).click();
+ await expect(page.locator("#moInput")).toBeVisible();
+ await page.keyboard.press("Escape");
+ await expect(page.locator("#moPanel")).toBeHidden();
+});

@@ -1,7 +1,7 @@
 import {test,expect} from "@playwright/test";
 test("dashboard, project creation and design prompt",async({page})=>{
  await page.goto("/");
- await expect(page.getByRole("heading",{name:"Design with intelligence."})).toBeVisible();
+ await expect(page.getByRole("heading",{name:"AI Tools"})).toBeVisible();
  await page.getByRole("button",{name:"Bắt đầu thiết kế"}).click();
  await expect(page.getByRole("heading",{name:"Design AI"})).toBeVisible();
  await page.locator("#f-brief").fill("Thiết kế phòng khách tối giản tinh tế");
@@ -11,7 +11,7 @@ test("dashboard, project creation and design prompt",async({page})=>{
 });
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");
- await page.getByRole("button",{name:"Mở Workspace"}).nth(5).click();
+ await page.locator(".tool-gallery [data-open=plan]").click();
  await expect(page.getByRole("heading",{name:"Plan AI"})).toBeVisible();
  await page.locator("#widthM").fill("5");
  await page.locator("#heightM").fill("6");

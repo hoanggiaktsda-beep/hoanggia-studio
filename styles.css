@@ -68,3 +68,21 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 @media(max-width:1050px){.topbar{padding-inline:13px}.top-actions .storage-tag{display:none}.top-actions select{max-width:155px}.breadcrumb .overline{display:none}}
 @media(max-width:760px){.topbar{height:54px;min-height:54px;padding:6px 12px}.breadcrumb strong{font-size:11px}.top-actions{gap:6px}.top-actions select{width:110px;max-width:110px;min-width:0;flex:0 1 110px;height:34px;min-height:34px;font-size:11px}.top-actions #newProject{min-width:0;height:34px;min-height:34px;padding:6px 9px;font-size:11px}}
 @media(max-width:380px){.topbar{gap:5px;padding-inline:8px}.top-actions select{max-width:88px}.top-actions #newProject{padding-inline:7px;font-size:10px}}
+
+
+/* V3.3 Architectural editorial hero */
+.studio-banner{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) 43%;min-height:250px;padding:0;gap:0;background:#111c28;border:1px solid #34465b;overflow:hidden;box-shadow:0 16px 38px #0006,inset 0 1px #ffffff18}
+.studio-banner::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 85% 10%,#c2a16a40,transparent 50%),repeating-linear-gradient(0deg,transparent 0 43px,#ffffff06 44px,transparent 45px),linear-gradient(110deg,#101820,#1b2a37)}
+.banner-content{position:relative;z-index:2;padding:30px clamp(24px,3vw,45px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.studio-banner .eyebrow{font-size:10px;letter-spacing:.2em;color:#e0bb7d}
+.studio-banner h2{font-size:clamp(23px,2.4vw,34px);font-weight:700;line-height:1.2;letter-spacing:-.035em;margin:13px 0;color:#f8f6f1}
+.studio-banner h2 em{font-style:normal;color:#d8b77e}
+.studio-banner p{font-size:12px;line-height:1.65;max-width:430px;color:#c0ccd8;margin:0 0 18px}
+.banner-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.banner-actions .btn{padding:10px 17px;font-size:12px;box-shadow:0 8px 22px #0006}
+.banner-index{font-size:9px;letter-spacing:.12em;color:#a8b6c3}
+.banner-visual{position:relative;min-height:250px;background:linear-gradient(90deg,#111c28 0%,transparent 35%),linear-gradient(0deg,#08121ca8,transparent 55%),url("https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1100&q=85") center/cover no-repeat}
+.banner-visual::after{content:"";position:absolute;inset:16px 19px 27px 16px;border-top:1px solid #e2bd806b;border-right:1px solid #e2bd806b;pointer-events:none}
+.banner-visual-caption{position:absolute;bottom:14px;right:20px;font-size:9px;letter-spacing:.13em;color:#f8e8cb;text-shadow:0 2px 9px #000}
+@media(max-width:900px){.studio-banner{grid-template-columns:minmax(0,1fr) 35%}.banner-content{padding:23px}.banner-visual-caption{font-size:8px}}
+@media(max-width:760px){.studio-banner{min-height:280px;display:block}.banner-visual{position:absolute;inset:0;min-height:0;z-index:-1;background-position:60% center}.banner-content{min-height:280px;padding:24px;background:linear-gradient(90deg,#101923f8,#101923e8 65%,#101923a6)}.studio-banner h2{font-size:clamp(23px,5.8vw,30px)}.studio-banner p{color:#e1e6eb}.banner-visual-caption,.banner-visual::after{display:none}}

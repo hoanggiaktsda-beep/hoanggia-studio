@@ -97,3 +97,13 @@ test("Design AI validates brief and preserves last valid prompt",async({page})=>
  await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
  await expect(page.locator("#promptResult")).toContainText("villa phong cách Japandi");
 });
+
+test("material library links external CC0 sources without local texture files",async({page})=>{
+ await page.goto("/#library");
+ await expect(page.getByRole("heading",{name:"Thư viện vật liệu"})).toBeVisible();
+ await expect(page.locator(".mat-card")).toHaveCount(8);
+ await expect(page.locator('a[href="https://polyhaven.com/textures"]').first()).toBeVisible();
+ await expect(page.locator('a[href="https://ambientcg.com/list"]')).toBeVisible();
+ await page.locator('[data-material="0"]').click();
+ await expect(page.getByText("Travertine",{exact:false}).first()).toBeVisible();
+});

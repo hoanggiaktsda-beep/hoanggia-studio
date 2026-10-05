@@ -1,0 +1,1 @@
+import {defineConfig} from "@playwright/test";export default defineConfig({testDir:"tests",testMatch:"**/*.spec.mjs",use:{baseURL:"http://127.0.0.1:8123",trace:"retain-on-failure"},retries:1,workers:1,reporter:"list"});

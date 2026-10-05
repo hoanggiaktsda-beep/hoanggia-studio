@@ -1,0 +1,27 @@
+name: Studio quality gate
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check src/core.js
+          node --check src/app.js
+          node --check sw.js
+      - name: Run core regression tests
+        run: node --test tests/core.test.mjs
+      - name: Verify PWA resources
+        run: |
+          for f in index.html styles.css src/core.js src/app.js assets/icon.svg manifest.webmanifest sw.js; do test -s "$f" || exit 1; done

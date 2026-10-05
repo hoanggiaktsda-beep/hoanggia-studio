@@ -102,3 +102,22 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 .visual-tile .tile-info p{font-size:12px;min-height:35px;color:#c6d0da}
 .visual-tile .tile-bottom{border-top:1px solid #ffffff12;margin-top:12px}
 @media(max-width:760px){.photo-tile{height:clamp(145px,35vw,210px)}.visual-tile .tile-info{padding:11px;min-height:128px}.visual-tile .tile-info h3{font-size:13px}.tile-art-label{font-size:9px;letter-spacing:.05em}}
+
+
+/* Mỡ AI floating companion — scoped, mobile safe, no external chat service */
+.mo-companion{position:fixed;right:22px;bottom:20px;z-index:1000;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.mo-companion button{cursor:pointer}.mo-toggle{display:flex;align-items:center;gap:9px;border:1px solid #d2af7388;background:linear-gradient(135deg,#17222e,#0c141e);color:#f4e6d0;border-radius:999px;padding:8px 16px 8px 8px;box-shadow:0 12px 35px #0009;font-size:13px;font-weight:700}
+.mo-face,.mo-avatar{display:grid;place-items:center;background:linear-gradient(135deg,#e2c58d,#a77d48);color:#101820;font:700 19px Georgia,serif;width:35px;height:35px;border-radius:50%}
+.mo-panel{position:absolute;bottom:62px;right:0;width:min(370px,calc(100vw - 24px));height:min(520px,calc(100dvh - 105px));background:#101924;border:1px solid #4b5360;border-radius:15px;box-shadow:0 25px 75px #000c;display:flex;flex-direction:column;overflow:hidden;color:#e9edf3}
+.mo-panel[hidden]{display:none}
+.mo-head{display:flex;align-items:center;gap:10px;padding:13px;background:linear-gradient(125deg,#1b2b3a,#101924);border-bottom:1px solid #293744}
+.mo-heading{flex:1;display:flex;flex-direction:column;line-height:1.3}.mo-heading strong{font-size:14px;color:#f3e6d0}.mo-heading small{font-size:10px;color:#b7c5d2}
+.mo-head button{width:30px;height:30px;min-height:30px;padding:0;border:1px solid #39495a;background:#192633;color:#f2e8d7;border-radius:7px;font-size:20px}
+.mo-disclosure{padding:8px 13px;background:#1a2633;color:#c9d1d9;font-size:10px;line-height:1.5;border-bottom:1px solid #293744}
+.mo-messages{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:10px;padding:14px 12px}
+.mo-bubble{max-width:92%;width:fit-content;padding:10px 12px;margin:0;border-radius:11px;font-size:12px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.mo-bubble.mo{background:#22303e;border:1px solid #34495b;align-self:flex-start;color:#edf1f4}.mo-bubble.user{background:#725c3f;align-self:flex-end;color:#fff7eb}
+.mo-chips{display:flex;gap:6px;padding:8px 11px;flex-wrap:wrap}.mo-chips button{border:1px solid #7c694b;background:#1b2632;color:#e5c998;border-radius:999px;padding:5px 9px;font-size:11px}
+.mo-form{display:flex;gap:7px;padding:9px 11px}.mo-form input{min-width:0;flex:1;width:auto;height:40px;min-height:40px;font-size:12px;padding:8px 11px;border-radius:8px;background:#0c141e;border:1px solid #425166;color:#fff}.mo-form button{width:40px;min-width:40px;min-height:40px;border:0;border-radius:8px;background:#c9a66f;color:#111;font-size:18px}
+.mo-note{margin:0;padding:0 12px 11px;text-align:center;font-size:9px;color:#94a6b7}.mo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:760px){.mo-companion{bottom:76px;right:12px}.mo-panel{bottom:59px;height:min(510px,calc(100dvh - 160px))}.mo-toggle-label{display:none}.mo-toggle{padding:6px;border-radius:50%}.mo-face{width:40px;height:40px}}

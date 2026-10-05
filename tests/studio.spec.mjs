@@ -2,7 +2,7 @@ import {test,expect} from "@playwright/test";
 test("dashboard, project creation and design prompt",async({page})=>{
  await page.goto("/");
  await expect(page.getByRole("heading",{name:"AI Tools"})).toBeVisible();
- await page.getByRole("button",{name:"Bắt đầu thiết kế"}).click();
+ await page.getByRole("button",{name:"Khám phá Studio"}).click();
  await expect(page.getByRole("heading",{name:"Design AI"})).toBeVisible();
  await page.locator("#f-brief").fill("Thiết kế phòng khách tối giản tinh tế");
  await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();

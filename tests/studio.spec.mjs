@@ -135,3 +135,16 @@ test("material library shows clearly labeled editorial imagery when exact textur
  await expect(page.locator(".mat-card").first()).toContainText("Chưa có mẫu đúng");
  await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href",/polyhaven.com\/textures\?q=travertine/);
 });
+
+test("material descriptions identify the actual material and installation concerns",async({page})=>{
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:"{}"}));
+ await page.goto("/#library");
+ await expect(page.locator(".mat-card")).toHaveCount(8);
+ await expect(page.locator(".mat-card").nth(0)).toContainText("Đá vôi tự nhiên");
+ await expect(page.locator(".mat-card").nth(1)).toContainText("không phải mọi marble trắng");
+ await expect(page.locator(".mat-card").nth(2)).toContainText("cốt ván");
+ await expect(page.locator(".mat-card").nth(4)).toContainText("PVD");
+ await expect(page.locator(".mat-card").nth(7)).toContainText("kính cường lực");
+ await expect(page.locator(".material-application")).toHaveCount(8);
+ await expect(page.locator(".material-caution")).toHaveCount(8);
+});

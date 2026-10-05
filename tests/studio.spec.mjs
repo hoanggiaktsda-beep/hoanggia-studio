@@ -157,3 +157,19 @@ test("materials render simple 3D specimens, not unrelated interior photos",async
  await expect(page.locator(".material-sample-0")).toBeVisible();
  await expect(page.locator(".material-sample-7")).toBeVisible();
 });
+
+test("material library stays functional when external API is down",async({page})=>{
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.abort());
+ await page.goto("/#library");
+ await expect(page.locator(".material-tile")).toHaveCount(8);
+ await expect(page.locator(".material-source").first()).toContainText("Không tải được kho trực tuyến");
+ await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href",/travertine/);
+ await page.locator('[data-material="0"]').click();
+ await expect(page.getByText("Travertine",{exact:false}).first()).toBeVisible();
+});
+test("material library ignores delayed results after navigating away",async({page})=>{
+ let finish;await page.route("https://api.polyhaven.com/assets?t=textures",async route=>{await new Promise(resolve=>{finish=resolve});await route.fulfill({status:200,contentType:"application/json",body:"{}"});});
+ await page.goto("/#library");await expect(page.locator(".material-tile")).toHaveCount(8);
+ await page.locator('.side [data-route="projects"]').click();
+ finish?.();await expect(page.getByRole("heading",{name:"Quản lý dự án"})).toBeVisible();
+});

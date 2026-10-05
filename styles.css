@@ -86,3 +86,19 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 .banner-visual-caption{position:absolute;bottom:14px;right:20px;font-size:9px;letter-spacing:.13em;color:#f8e8cb;text-shadow:0 2px 9px #000}
 @media(max-width:900px){.studio-banner{grid-template-columns:minmax(0,1fr) 35%}.banner-content{padding:23px}.banner-visual-caption{font-size:8px}}
 @media(max-width:760px){.studio-banner{min-height:280px;display:block}.banner-visual{position:absolute;inset:0;min-height:0;z-index:-1;background-position:60% center}.banner-content{min-height:280px;padding:24px;background:linear-gradient(90deg,#101923f8,#101923e8 65%,#101923a6)}.studio-banner h2{font-size:clamp(23px,5.8vw,30px)}.studio-banner p{color:#e1e6eb}.banner-visual-caption,.banner-visual::after{display:none}}
+
+
+/* V3.5 visual-rich tool cards: editorial architectural depth */
+.tool-gallery{gap:14px}
+.visual-tile{border:1px solid #344050;box-shadow:0 10px 25px #03070d45;transition:transform .18s,border-color .18s,box-shadow .18s}
+.visual-tile:hover{transform:translateY(-4px);border-color:#d2ad73;box-shadow:0 15px 30px #0008}
+.photo-tile{height:clamp(155px,14vw,230px);background-color:#263441;background-size:cover;background-position:center;isolation:isolate;position:relative}
+.photo-tile::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,#d9b77e18,transparent 40%,#0d182028)}
+.photo-tile .tile-index{border:1px solid #e2c58b77;background:#101820db;padding:5px 9px}
+.photo-tile .tile-icon{position:absolute;right:10px;bottom:10px;background:#0d141cde;border-color:#c5aa7b9c}
+.tile-art-label{position:absolute;bottom:12px;left:12px;color:#f2e7d4;font-size:10px;font-weight:650;letter-spacing:.12em;text-shadow:0 2px 8px #000}
+.visual-tile .tile-info{background:linear-gradient(180deg,#131c27,#0d151f);min-height:122px;padding:15px}
+.visual-tile .tile-info h3{font-size:15px;letter-spacing:-.02em}
+.visual-tile .tile-info p{font-size:12px;min-height:35px;color:#c6d0da}
+.visual-tile .tile-bottom{border-top:1px solid #ffffff12;margin-top:12px}
+@media(max-width:760px){.photo-tile{height:clamp(145px,35vw,210px)}.visual-tile .tile-info{padding:11px;min-height:128px}.visual-tile .tile-info h3{font-size:13px}.tile-art-label{font-size:9px;letter-spacing:.05em}}

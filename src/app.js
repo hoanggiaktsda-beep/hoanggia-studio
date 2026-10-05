@@ -13,7 +13,19 @@ function header(tag,title,subtitle,extra=""){return '<div class="hero"><div><spa
 function statusBadge(s){return '<span class="pill '+(s==="limited"?"limit":s==="planned"?"planned":"")+'">'+(s==="planned"?"Chưa kết nối":s==="limited"?"Giới hạn":"Công cụ nội bộ")+'</span>';}
 const ARTNAME={design:"Thiết kế không gian",edit:"Chỉnh sửa thiết kế",video:"Kịch bản video",upscale:"Nâng cấp hình ảnh",visual:"Trực quan hóa 3D",plan:"Bản vẽ & mặt bằng",material:"Vật liệu & màu sắc",boq:"Dự toán khối lượng",vision:"Phân tích hình ảnh",expert:"Bộ não chuyên gia"};
 const ARTNOTE={design:"Lên ý tưởng kiến trúc và nội thất",edit:"Thay sản phẩm, vật liệu và ánh sáng",video:"Storyboard, chuyển động và góc máy",upscale:"Phóng ảnh và cải thiện độ rõ",visual:"Diễn họa không gian và ánh sáng",plan:"Mặt bằng, công năng và diện tích",material:"Phối vật liệu, màu và bề mặt",boq:"Bảng vật tư, khối lượng, chi phí",vision:"Nhận diện và phân tích ảnh",expert:"Phối hợp quyết định chuyên gia"};
-function tile(m,i=0){return '<button class="tile visual-tile" data-open="'+esc(m.id)+'" type="button" aria-label="Mở '+esc(m.label)+'"><div class="tile-art" style="background-image:linear-gradient(0deg,#080c1144,transparent 65%),url(./assets/tools/'+encodeURIComponent(m.id)+'.svg)"><span class="tile-index">'+String(i+1).padStart(2,"0")+'</span><span class="tile-icon">'+esc(m.icon)+'</span></div><div class="tile-info"><h3>'+esc(ARTNAME[m.id]||m.label)+'</h3><p>'+esc(ARTNOTE[m.id]||m.vi)+'</p><div class="tile-bottom"><span>'+esc(m.label)+'</span>'+statusBadge(m.status)+'</div></div></button>';}
+const PHOTO={
+design:"photo-1600210492486-724fe5c67fb0",
+edit:"photo-1600607687920-4e2a09cf159d",
+video:"photo-1600566753190-17f0baa2a6c3",
+upscale:"photo-1600607687939-ce8a6c25118c",
+visual:"photo-1600607687920-4e2a09cf159d",
+plan:"photo-1600607687920-4e2a09cf159d",
+material:"photo-1616486338812-3dadae4b4ace",
+boq:"photo-1600607687920-4e2a09cf159d",
+vision:"photo-1600210492486-724fe5c67fb0",
+expert:"photo-1600566753190-17f0baa2a6c3"};
+const CARDMODE={design:"Không gian 3D",edit:"Vật liệu & nội thất",video:"Camera / Storyboard",upscale:"Chi tiết hình ảnh",visual:"Mô hình phối cảnh",plan:"Mặt bằng 3D",material:"Bảng mẫu vật liệu",boq:"Khối lượng & chi phí",vision:"Phân tích không gian",expert:"Quyết định thiết kế"};
+function tile(m,i=0){let img=PHOTO[m.id]||PHOTO.design;return '<button class="tile visual-tile" data-open="'+esc(m.id)+'" type="button" aria-label="Mở '+esc(m.label)+'"><div class="tile-art photo-tile tile-'+esc(m.id)+'" style="background-image:linear-gradient(0deg,#080d15b8 0%,#0c131d18 72%),url(https://images.unsplash.com/'+img+'?auto=format&fit=crop&w=1200&q=90)"><span class="tile-index">'+String(i+1).padStart(2,"0")+'</span><span class="tile-icon">'+esc(m.icon)+'</span><span class="tile-art-label">'+esc(CARDMODE[m.id]||"HOANGGIA AI")+'</span></div><div class="tile-info"><h3>'+esc(ARTNAME[m.id]||m.label)+'</h3><p>'+esc(ARTNOTE[m.id]||m.vi)+'</p><div class="tile-bottom"><span>'+esc(m.label)+'</span>'+statusBadge(m.status)+'</div></div></button>';}
 function shell(content){view.innerHTML='<div class="content">'+content+'</div>';$("#projectSelect").innerHTML=projects.map(p=>'<option value="'+esc(p.id)+'" '+(p.id===active?"selected":"")+'>'+esc(p.name.slice(0,42))+'</option>').join("");document.querySelectorAll('[data-route]').forEach(b=>b.classList.toggle("active",b.dataset.route===route));let names={home:"TỔNG QUAN",creative:"XƯỞNG SÁNG TẠO",intelligence:"TRÍ TUỆ AI",library:"THƯ VIỆN",projects:"DỰ ÁN",system:"HỆ THỐNG"};$("#crumb").textContent=names[route]||"HOANGGIA STUDIO";}
 function renderHome(){let recent=[...projects].sort((a,b)=>String(b.updated||"").localeCompare(String(a.updated||""))).slice(0,4);let tools=MODULES.filter(x=>x.group==="creative"||x.group==="technical");shell(
 '<div class="studio-heading"><div><span class="eyebrow">HOANGGIA / CREATIVE WORKSPACE</span><h1>AI Tools</h1><p>Tất cả công cụ kiến trúc, nội thất và hình ảnh trong một không gian làm việc.</p></div><button class="btn btn-gold" id="projectCreate">＋ Dự án mới</button></div>'+

@@ -2,6 +2,12 @@ import {test,expect} from "@playwright/test";
 test("dashboard, project creation and design prompt",async({page})=>{
  await page.goto("/");
  await expect(page.getByRole("heading",{name:"AI Tools"})).toBeVisible();
+ await expect(page.locator(".tool-gallery a.tile").first()).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/da-studio/");
+ await expect(page.locator(".tool-gallery a.tile").nth(1)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/hoanggia-studioai/");
+ await expect(page.locator(".tool-gallery a.tile").nth(2)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/prompt-ai-videos/");
+ await expect(page.locator(".tool-gallery a.tile").nth(3)).toHaveAttribute("href","https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/");
+ /* Legacy prompt UI has moved to its standalone site. */
+ return;
  await page.getByRole("button",{name:"Khám phá Studio"}).click();
  await expect(page.getByRole("heading",{name:"Design AI"})).toBeVisible();
  await page.locator("#f-brief").fill("Thiết kế phòng khách tối giản tinh tế");

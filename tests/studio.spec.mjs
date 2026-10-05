@@ -68,4 +68,18 @@ test("Thư ký AI companion stays usable on mobile",async({page})=>{
  await expect(page.locator("#moPanel")).toBeHidden();
 });
 
-test("Public chat uses the HOANGGIA AI logo for sender avatar",async({page})=>{await page.goto("/");await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();await page.locator("#moInput").fill("Xin chào");await page.locator("#moForm button").click();await expect(page.locator(".mo-user-avatar")).toHaveAttribute("src","./assets/icon.svg");await expect(page.locator(".mo-heading")).toContainText("THƯ KÝ AI");});
+test("Public chat uses the HOANGGIA AI logo for sender avatar",async({page})=>{await page.goto("/");await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();await page.locator("#moInput").fill("Xin chào");await page.locator("#moForm button").click();await expect(page.locator(".mo-user-avatar")).toHaveAttribute("src","./assets/icon.svg");await expect(page.locator(".mo-heading")).toContainText("Thư ký AI");});
+
+test("Luxury secretary exposes responsive actions and accessible close",async({page})=>{
+ await page.goto("/");
+ await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();
+ await expect(page.locator(".mo-head-photo")).toBeVisible();
+ await expect(page.locator(".mo-intro")).toBeVisible();
+ await expect(page.locator(".mo-chips button")).toHaveCount(5);
+ await page.getByRole("button",{name:"Thu nhỏ chat"}).click();
+ await expect(page.locator("#moPanel")).toBeHidden();
+ await page.getByRole("button",{name:"Mở trò chuyện với Thư ký AI"}).click();
+ await page.locator("#moInput").fill("Gợi ý phong cách");
+ await page.locator("#moForm button").click();
+ await expect(page.locator("#moMessages")).toContainText("Japandi");
+});

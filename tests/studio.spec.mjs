@@ -17,7 +17,7 @@ test("plan calculations and project backup",async({page})=>{
  await page.locator("#heightM").fill("6");
  await page.getByRole("button",{name:"Tính diện tích"}).click();
  await expect(page.locator("#areaResult")).toContainText("30 m²");
- await page.getByRole("button",{name:"Dự án",exact:true}).first().click();
+ await page.locator(".side [data-route=projects]").click();
  await expect(page.getByRole("button",{name:"Sao lưu toàn bộ"})).toBeVisible();
 });
 test("mobile navigation",async({page})=>{

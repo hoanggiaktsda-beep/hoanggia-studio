@@ -67,7 +67,7 @@ switch(t.id){
 case "newProject":case "projectCreate":makeProject();break;
 case "makePrompt":buildPrompt();break;
 case "resetPrompt":if(confirm("Xóa biểu mẫu hiện tại?")){delete project().data[moduleId];touch();openModule(moduleId);}break;
-case "copyPrompt":{let s=$("#promptResult")?.textContent||"";if(!s||s.startsWith("Điền"))return notify("Chưa có prompt.");navigator.clipboard?.writeText(s).then(()=>notify("Đã sao chép."),()=>notify("Không sao chép được; dùng tải TXT.")).catch(()=>notify("Không sao chép được."));break;}
+case "copyPrompt":{let s=$("#promptResult")?.textContent||"";if(!s||s.startsWith("Điền"))return notify("Chưa có prompt.");if(!navigator.clipboard?.writeText){notify("Trình duyệt không hỗ trợ sao chép tự động. Hãy tải TXT.");break;}navigator.clipboard.writeText(s).then(()=>notify("Đã sao chép."),()=>notify("Không sao chép được; dùng tải TXT."));break;}
 case "savePromptTxt":{let s=$("#promptResult")?.textContent||"";if(s&&!s.startsWith("Điền"))download(s,"HOANGGIA-"+moduleId+".txt");break;}
 case "analyzeVision":runVision();break;
 case "processUpscale":doUpscale();break;

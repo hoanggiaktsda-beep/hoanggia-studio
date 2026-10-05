@@ -121,3 +121,10 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 .mo-form{display:flex;gap:7px;padding:9px 11px}.mo-form input{min-width:0;flex:1;width:auto;height:40px;min-height:40px;font-size:12px;padding:8px 11px;border-radius:8px;background:#0c141e;border:1px solid #425166;color:#fff}.mo-form button{width:40px;min-width:40px;min-height:40px;border:0;border-radius:8px;background:#c9a66f;color:#111;font-size:18px}
 .mo-note{margin:0;padding:0 12px 11px;text-align:center;font-size:9px;color:#94a6b7}.mo-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 @media(max-width:760px){.mo-companion{bottom:76px;right:12px}.mo-panel{bottom:59px;height:min(510px,calc(100dvh - 160px))}.mo-toggle-label{display:none}.mo-toggle{padding:6px;border-radius:50%}.mo-face{width:40px;height:40px}}
+
+/* Canonical HOANGGIA AI avatar — same monogram as uploaded brand reference */
+.mo-face,.mo-avatar{background:#070807;overflow:hidden;border:1px solid #d4b579;flex-shrink:0}
+.mo-face img,.mo-avatar img{width:100%;height:100%;object-fit:contain;display:block}
+.mo-user-line{display:flex;align-items:flex-end;justify-content:flex-end;gap:8px;width:100%}
+.mo-user-line .mo-bubble.user{margin-left:auto}
+.mo-user-avatar{height:30px;width:30px;object-fit:contain;background:#070807;border:1px solid #d4b579;border-radius:50%;flex-shrink:0}

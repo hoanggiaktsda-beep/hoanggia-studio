@@ -21,7 +21,7 @@ jobs:
       - name: Browser tests
         run: |
           python3 -m http.server 8123 --bind 127.0.0.1 >/tmp/hg-server.log 2>&1 &
-          npx playwright test tests/studio.spec.mjs --reporter=list
+          npx playwright test tests/studio.spec.mjs --config=playwright.config.mjs --reporter=list
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

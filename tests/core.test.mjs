@@ -1,0 +1,8 @@
+import test from "node:test";import assert from "node:assert/strict";import {MODULES,SPACES,STYLES,EXPERTS,MATERIALS,newProject,safeText,validateProject,area,boq,promptQuality,compilePrompt,csv} from "../src/core.js";
+test("registry has unique modules",()=>{assert.equal(new Set(MODULES.map(x=>x.id)).size,MODULES.length);assert.ok(MODULES.length>=10);assert.equal(SPACES.length,4);assert.ok(STYLES.length>=8);assert.ok(EXPERTS.length>=9);assert.ok(MATERIALS.length>=8);});
+test("valid project schema",()=>{let p=newProject("Văn phòng");assert.ok(validateProject(p));assert.equal(validateProject({...p,history:{}}),false);assert.equal(validateProject({...p,schemaVersion:999}),false);});
+test("area calculations",()=>{assert.equal(area(4.5,6),27);assert.equal(area("5","3"),15);assert.equal(area(0,5),null);assert.equal(area(-1,3),null);assert.equal(area(Infinity,4),null);});
+test("boq calculates only valid rows",()=>{let b=boq([{name:"Tủ",qty:2,price:1250000,unit:"bộ"},{name:"x",qty:-1,price:3},{name:"NaN",qty:"abc",price:7}]);assert.equal(b.total,2500000);assert.equal(b.rows.length,1);});
+test("prompt compiler preserves locks",()=>{let c={mode:"edit",space:"Nội thất",brief:"Thay sofa",preserve:"yes",style:"Minimal Luxury",camera:"35mm"};let s=compilePrompt(c);assert.match(s,/giữ nguyên hình học kiến trúc/i);assert.match(s,/35mm/);assert.match(s,/Thay sofa/);});
+test("quality flags conflict and reference",()=>{let q=promptQuality({brief:"Tạo phòng",task:"create",preserve:"yes",reference:"yes",referenceProvided:false});assert.equal(q.warnings.length,2);});
+test("csv and sanitization",()=>{assert.equal(csv([['a"b',"c,d"]]),'"a""b","c,d"');assert.equal(safeText("\u0000 Hi \n"),"Hi");});

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101411"><meta name="description" content="HOANGGIA STUDIO — nền tảng trí tuệ thiết kế kiến trúc, nội thất và sáng tạo hình ảnh"><title>HOANGGIA STUDIO — Design Intelligence</title><link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css"></head>
+<body>
+<div class="app">
+<aside class="side" aria-label="Điều hướng chính">
+<a class="brand" href="#home" aria-label="HOANGGIA STUDIO"><img src="./assets/icon.svg" alt=""><span><strong>HOANGGIA</strong><small>STUDIO <b>V3.0</b></small></span></a>
+<div class="side-label">WORKSPACE</div><nav id="mainNav">
+<button data-route="home" class="active"><span class="ni">▦</span> Tổng quan</button>
+<button data-route="creative"><span class="ni">◈</span> Xưởng sáng tạo</button>
+<button data-route="intelligence"><span class="ni">✳</span> Trí tuệ AI</button>
+<button data-route="library"><span class="ni">▤</span> Thư viện</button>
+<button data-route="projects"><span class="ni">▧</span> Dự án</button>
+<button data-route="system"><span class="ni">⌘</span> Hệ thống</button></nav>
+<div class="side-bottom"><span class="status-dot"></span><span>Local-first · Không cần API key</span><small id="sideVersion">v3.0</small></div></aside>
+<div class="frame"><header class="topbar">
+<div class="breadcrumb"><span class="overline">WORKSPACE /</span><strong id="crumb">TỔNG QUAN</strong></div>
+<div class="top-actions"><span class="storage-tag" title="Dự án lưu trên trình duyệt này">◉ Lưu cục bộ</span><select id="projectSelect" aria-label="Dự án hiện tại"></select><button class="btn btn-gold" id="newProject" type="button">＋ Dự án mới</button></div>
+</header><main id="view" tabindex="-1" aria-live="polite"></main>
+<footer class="foot"><span>HOANGGIA STUDIO © 2026</span><span>Reason first. Design with intent. Render with control.</span><span id="footerStatus">Tất cả dữ liệu dự án nằm trong trình duyệt</span></footer></div>
+<nav class="mobile-nav" aria-label="Điều hướng di động"><button data-route="home">⌂<small>Tổng quan</small></button><button data-route="creative">◈<small>Sáng tạo</small></button><button data-route="intelligence">✳<small>Trí tuệ</small></button><button data-route="projects">▧<small>Dự án</small></button><button data-route="system">⌘<small>Hệ thống</small></button></nav>
+</div><div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="./src/app.js"></script></body></html>

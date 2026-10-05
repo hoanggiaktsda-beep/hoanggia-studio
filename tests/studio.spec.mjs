@@ -127,7 +127,7 @@ test("material specificity rejects generic category lookalikes",async({page})=>{
  await expect(page.locator('.mat-card').nth(7).getByRole("link",{name:"Nguồn khác"})).toHaveAttribute("href",/ambientcg.com\/list\?search=smoked/);
 });
 
-test("material library shows clearly labeled editorial imagery when exact texture is unavailable",async({page})=>{
+test("material library shows clearly labeled editorial imagery when exact texture is unavailable",async({page})=>{\n await page.route("https://images.unsplash.com/**",route=>route.fulfill({status:200,contentType:"image/svg+xml",body:"<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"8\\" height=\\"8\\"></svg>"}));
  await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:"{}"}));
  await page.goto("/#library");
  await expect(page.locator(".material-preview")).toHaveCount(8);

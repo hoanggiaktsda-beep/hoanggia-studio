@@ -107,3 +107,11 @@ test("material library links external CC0 sources without local texture files",a
  await page.locator('[data-material="0"]').click();
  await expect(page.getByText("Travertine",{exact:false}).first()).toBeVisible();
 });
+
+test("material card links to matching asset or filtered category",async({page})=>{
+ await page.route("https://api.polyhaven.com/assets?t=textures",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({travertine_floor:{name:"Travertine Floor",tags:["travertine"]},marble_tiles:{name:"Marble Tiles",tags:["marble"]},oak_wood:{name:"Oak Wood",tags:["oak"]}})}));
+ await page.goto("/#library");
+ await expect(page.locator('[data-material-link="0"]')).toHaveAttribute("href","https://polyhaven.com/a/travertine_floor");
+ await expect(page.locator('[data-material-link="1"]')).toHaveAttribute("href","https://polyhaven.com/a/marble_tiles");
+ await expect(page.locator('[data-material-link="3"]')).toHaveAttribute("href",/textures\?q=walnut/);
+});

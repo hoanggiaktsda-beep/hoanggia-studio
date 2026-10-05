@@ -171,3 +171,6 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 .mo-suggestions{padding:3px 10px 5px;gap:5px}.mo-suggestions button{padding:5px 8px;font-size:10px}
 .mo-form{padding:7px 10px}.mo-form input,.mo-form button{height:40px;min-height:40px}.mo-form button{width:42px;min-width:42px}.mo-note{padding:0 10px 7px;font-size:9px}
 @media(max-width:760px){.mo-companion{right:10px;bottom:72px}.mo-toggle{width:48px;height:48px;min-height:48px}.mo-toggle-photo{width:38px;height:38px}.mo-status-dot{left:33px}.mo-panel{right:0;bottom:56px;width:calc(100vw - 20px);height:min(520px,calc(100dvh - 145px))}.mo-intro{min-height:52px}.mo-chips button{min-height:35px}}
+
+/* Lightweight remote material preview — images are never committed or persisted. */
+.material-preview{position:relative;overflow:hidden;min-height:94px;border-radius:9px}.material-preview img{display:block;width:100%;height:100%;position:absolute;inset:0;object-fit:cover}.material-preview-note{position:absolute;bottom:6px;left:7px;z-index:1;background:#091018b9;color:#f2dbb2;padding:3px 6px;border-radius:4px;font-size:9px}.material-source{display:block;margin-top:10px;color:#aeb9c7;font-size:10px;line-height:1.4}.material-source a{color:#d7b77b;text-decoration:underline;text-underline-offset:3px}.mat-card .button-row{flex-wrap:wrap;gap:7px}

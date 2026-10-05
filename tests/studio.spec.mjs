@@ -7,7 +7,7 @@ test("dashboard, project creation and design prompt",async({page})=>{
  await page.locator("#f-brief").fill("Thiết kế phòng khách tối giản tinh tế");
  await page.getByRole("button",{name:"Phân tích & tạo prompt"}).click();
  await expect(page.locator("#promptResult")).toContainText("phòng khách tối giản");
- await page.getByRole("button",{name:"Sao chép"}).toBeVisible();
+ await expect(page.getByRole("button",{name:"Sao chép"})).toBeVisible();
 });
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");

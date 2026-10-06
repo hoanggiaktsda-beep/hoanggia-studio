@@ -285,3 +285,19 @@ img,video,canvas,svg{max-width:100%}
  .tool-gallery{grid-template-columns:1fr}
  .top-actions #newProject{font-size:10px}
 }
+
+/* Mobile viewport containment V2: prevent off-screen panels and sideways panning */
+@media(max-width:760px){
+ html{width:100%;max-width:100%;overflow-x:hidden}
+ body{width:100%;max-width:100%;margin:0;overflow-x:hidden}
+ .app{display:block!important;width:100%;max-width:100%;min-width:0;overflow-x:clip}
+ .frame{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;position:relative!important;left:auto!important;right:auto!important;transform:none!important;margin:0!important;padding:0!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:clip}
+ #view,.content{box-sizing:border-box!important;position:relative;left:auto!important;transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;margin-left:0!important;margin-right:0!important}
+ #view>*{max-width:100%;min-width:0}
+ .hero,.studio-banner,.banner-content,.large-feature,.panel,.grid,.g2,.g3,.g4,.workspace,.project-card,.tool-gallery,.section-title{box-sizing:border-box;min-width:0!important;max-width:100%!important}
+ .studio-banner{overflow:hidden}
+ .banner-content{width:100%;overflow-wrap:anywhere}
+ .studio-banner h1,.studio-banner p,.large-feature h1,.large-feature h2{max-width:100%;overflow-wrap:anywhere}
+ .topbar{width:100%;max-width:100%;box-sizing:border-box}
+ .mobile-nav{box-sizing:border-box;width:100%;max-width:100%;overflow:hidden}
+}

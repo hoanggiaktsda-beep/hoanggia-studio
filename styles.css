@@ -301,3 +301,8 @@ img,video,canvas,svg{max-width:100%}
  .topbar{width:100%;max-width:100%;box-sizing:border-box}
  .mobile-nav{box-sizing:border-box;width:100%;max-width:100%;overflow:hidden}
 }
+
+/* On mobile the sticky toolbar owns the single create-project action. */
+@media(max-width:760px){
+ #projectCreate{display:none!important}
+}

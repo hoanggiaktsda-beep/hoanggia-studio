@@ -18,7 +18,7 @@
 </header><main id="view" tabindex="-1" aria-live="polite"></main>
 <footer class="foot"><span>HOANGGIA STUDIO © 2026</span><span>Tư duy có cơ sở. Thiết kế có mục đích. Diễn họa có kiểm soát.</span><span id="footerStatus">Tất cả dữ liệu dự án nằm trong trình duyệt</span></footer></div>
 <nav class="mobile-nav" aria-label="Điều hướng di động"><button data-route="home">⌂<small>Tổng quan</small></button><button data-route="creative">◈<small>Sáng tạo</small></button><button data-route="intelligence">✳<small>Trí tuệ</small></button><button data-route="library">▤<small>Thư viện</small></button><button data-route="projects">▧<small>Dự án</small></button><button data-route="system">⌘<small>Hệ thống</small></button></nav>
-</div><div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div><aside class="music-dock" id="musicDock" aria-label="Nghe nhạc YouTube"><button id="musicToggle" class="music-toggle" type="button" aria-expanded="false" aria-controls="musicPanel">♫ Nhạc YouTube</button><div class="music-panel" id="musicPanel" hidden><label for="musicUrl">Dán liên kết video hoặc danh sách phát YouTube</label><div class="music-input-row"><input id="musicUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"><button id="musicPlay" type="button">Phát</button></div><p id="musicMessage" role="status">Chỉ phát nội dung YouTube cho phép nhúng. Nhạc tiếp tục khi chuyển mục trong Studio.</p><div id="musicFrame"></div><div class="music-input-row"><a id="musicExternal" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Mở YouTube ↗</a><button id="musicStop" type="button">Dừng nhạc</button></div></div></aside><div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 /* Chuyển thẳng Design AI đến DA Studio, kể cả khi còn giao diện cũ trong bộ nhớ. */
 document.addEventListener("click",function(e){
@@ -27,4 +27,4 @@ document.addEventListener("click",function(e){
  e.preventDefault();e.stopImmediatePropagation();
  location.assign("https://hoanggiaktsda-beep.github.io/da-studio/");
 },true);
-</script><script type="module" src="./src/app.js?v=4.4.0"></script><script defer src="./src/mo-chat.js"></script></body></html>
+</script><script type="module" src="./src/app.js?v=4.4.0"></script><script defer src="./src/mo-chat.js"></script><script defer src="./src/youtube-music.js"></script></body></html>

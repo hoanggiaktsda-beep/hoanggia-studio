@@ -249,3 +249,11 @@ test("Plan AI V1 remains contained on mobile",async({page})=>{
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
  await expect(page.locator(".plan-flow")).toBeVisible();
 });
+
+test("Plan AI prompt supports AI đối ứng",async({page})=>{
+ await page.goto("/#creative");await page.locator('.tool-gallery [data-open="plan"]').click();
+ await expect(page.locator("#planTargetAI")).toBeVisible();
+ await page.locator("#planTargetAI").selectOption("Gemini");
+ await page.getByRole("button",{name:"Tạo prompt CAD 2D"}).click();
+ await expect(page.locator("#planPromptResult")).toContainText("AI ĐỐI ỨNG: Gemini");
+});

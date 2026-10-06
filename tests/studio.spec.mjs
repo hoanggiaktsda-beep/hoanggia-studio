@@ -311,3 +311,18 @@ test("BOQ preserves edits across navigation and refuses incomplete export",async
  await expect(page.locator('[data-k="qty"]').first()).toHaveValue("22");
  await expect(page.locator("#boqPriceSource")).toHaveValue("Báo giá 06/10/2026");
 });
+
+test("YouTube music dock validates links and survives Studio navigation",async({page})=>{
+ await page.goto("/#home");await page.locator("#musicToggle").click();
+ await page.locator("#musicUrl").fill("https://example.com/watch?v=dQw4w9WgXcQ");
+ await page.locator("#musicPlay").click();
+ await expect(page.locator("#musicMessage")).toContainText("không hợp lệ");
+ await expect(page.locator("#musicFrame iframe")).toHaveCount(0);
+ await page.locator("#musicUrl").fill("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+ await page.locator("#musicPlay").click();
+ await expect(page.locator("#musicFrame iframe")).toHaveAttribute("src","https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ");
+ await page.locator(".side [data-route=creative]").click();
+ await expect(page.locator("#musicFrame iframe")).toHaveCount(1);
+ await page.locator("#musicStop").click();
+ await expect(page.locator("#musicFrame iframe")).toHaveCount(0);
+});

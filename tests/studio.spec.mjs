@@ -8,7 +8,7 @@ test("dashboard standalone AI links",async({page})=>{
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");
  await page.locator(".tool-gallery [data-open=plan]").click();
- await expect(page.getByRole("heading",{name:"Plan AI"})).toBeVisible();
+ await expect(page.getByRole("heading",{name:"Bản vẽ & mặt bằng"})).toBeVisible();
  await page.locator("#widthM").fill("5");
  await page.locator("#heightM").fill("6");
  await page.getByRole("button",{name:"Tính diện tích"}).click();

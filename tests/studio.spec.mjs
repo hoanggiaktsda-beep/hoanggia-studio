@@ -300,6 +300,7 @@ test("BOQ preserves edits across navigation and refuses incomplete export",async
  await page.locator('[data-k="qty"]').first().fill("22");
  await page.locator('[data-k="price"]').first().fill("300000");
  await page.locator("#boqPriceSource").fill("Báo giá 06/10/2026");
+ await page.locator('[data-k="unit"]').first().fill("");
  await page.getByRole("button",{name:"↓ Xuất CSV"}).click();
  await expect(page.locator("#toast")).toContainText("Sửa dữ liệu BOQ");
  await page.locator('[data-k="unit"]').first().fill("m²");

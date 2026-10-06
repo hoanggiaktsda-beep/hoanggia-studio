@@ -170,3 +170,15 @@ test("Visual AI opens external image platforms without changing other tools",asy
  await page.getByRole("button",{name:/Tất cả công cụ/}).click();
  for(const id of ["plan","material","boq"])await expect(page.locator('.tool-gallery [data-open="'+id+'"]')).toHaveCount(1);
 });
+
+test("responsive navigation and layout across screen widths",async({page})=>{
+ for(const width of [320,375,430,768,1024,1366,1920]){
+  await page.setViewportSize({width,height:900});
+  await page.goto("/#creative");
+  await expect(page.locator(".tool-gallery")).toBeVisible();
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+2);
+  expect(overflow,"unexpected horizontal overflow at "+width).toBe(false);
+  if(width<=760)await expect(page.locator(".mobile-nav")).toBeVisible();
+  else await expect(page.locator(".side")).toBeVisible();
+ }
+});

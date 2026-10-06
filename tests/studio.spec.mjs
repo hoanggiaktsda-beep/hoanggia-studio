@@ -8,7 +8,7 @@ test("dashboard standalone AI links",async({page})=>{
 test("plan calculations and project backup",async({page})=>{
  await page.goto("/#creative");
  await page.locator(".tool-gallery [data-open=plan]").click();
- await expect(page.getByRole("heading",{name:"Plan AI"})).toBeVisible();
+ await expect(page.getByRole("heading",{name:"Bản vẽ & mặt bằng"})).toBeVisible();
  await page.locator("#widthM").fill("5");
  await page.locator("#heightM").fill("6");
  await page.getByRole("button",{name:"Tính diện tích"}).click();
@@ -180,5 +180,19 @@ test("responsive navigation and layout across screen widths",async({page})=>{
   expect(overflow,"unexpected horizontal overflow at "+width).toBe(false);
   if(width<=760)await expect(page.locator(".mobile-nav")).toBeVisible();
   else await expect(page.locator(".side")).toBeVisible();
+ }
+});
+
+test("mobile workspace keeps all six destinations accessible",async({page})=>{
+ for(const width of [320,375,390,430,600,760]){
+  await page.setViewportSize({width,height:844});
+  await page.goto("/#home");
+  const nav=page.locator(".mobile-nav");
+  await expect(nav.locator("button")).toHaveCount(6);
+  await nav.locator('[data-route="library"]').click();
+  await expect(page.locator("#view")).toBeVisible();
+  await nav.locator('[data-route="creative"]').click();
+  await expect(page.locator(".tool-gallery")).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
  }
 });

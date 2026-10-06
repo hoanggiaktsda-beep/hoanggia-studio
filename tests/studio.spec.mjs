@@ -215,3 +215,12 @@ test("mobile dashboard never starts off-screen or permits sideways scrolling",as
   expect(positions.scrollX,"horizontal pan at "+width).toBe(0);
  }
 });
+
+test("mobile dashboard shows only one create project action",async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto("/#home");
+ await expect(page.locator("#newProject")).toBeVisible();
+ await expect(page.locator("#projectCreate")).toBeHidden();
+ await page.setViewportSize({width:1366,height:900});
+ await expect(page.locator("#projectCreate")).toBeVisible();
+});

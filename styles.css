@@ -201,3 +201,47 @@ input,select,textarea{background:#101721;border-color:#334052;color:#eef1f5}
 .material-sample-7{--material-base:#55615f99;--material-edge:#283431;--material-pattern:linear-gradient(130deg,#f9ffff70 0 3%,transparent 10% 70%,#c2d2d333 90%),linear-gradient(115deg,#586663d9,#252f31b9)}
 .material-sample-7 .material-tile{border:1px solid #d2e0de77;backdrop-filter:blur(1px)}
 .mat-card .material-sample .material-preview-note{bottom:8px;left:8px;font-size:10px}
+
+/* Responsive UX audit: laptop, tablet, phone and wide displays */
+html,body{max-width:100%;overflow-x:clip}
+.frame,.content,#view,.panel,.workspace,.tool-gallery,.grid{min-width:0}
+img,video,canvas,svg{max-width:100%}
+.panel,.tile,.project-card{overflow-wrap:anywhere}
+.tool-gallery{grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))}
+.tool-gallery>.panel{grid-column:1/-1}
+.tool-gallery .tile{min-width:0}
+.topbar{flex-wrap:wrap}
+.top-actions{min-width:0;flex-wrap:wrap;justify-content:flex-end}
+.top-actions select{min-width:0}
+.data-scroll{max-width:100%;overscroll-behavior-x:contain}
+.mobile-nav button{touch-action:manipulation}
+@media(min-width:761px) and (max-width:1024px){
+ .side{width:180px;padding:22px 10px}
+ .frame{margin-left:180px}
+ .topbar{gap:10px;padding:12px 18px}
+ .content{padding:22px}
+ .tool-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hero{align-items:flex-start}
+}
+@media(max-width:760px){
+ .topbar{align-items:flex-start;gap:8px}
+ .top-actions{width:100%;justify-content:space-between}
+ .top-actions select{max-width:none;flex:1 1 120px}
+ .top-actions .btn{flex:0 0 auto}
+ .tool-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .tool-gallery .tile{padding:13px;min-height:116px}
+ .tool-gallery .tile h3{font-size:14px;line-height:1.35}
+ .tool-gallery .tile p{font-size:11px}
+ .foot{flex-wrap:wrap;padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+ .toast{left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));max-width:none}
+ .mobile-nav{overflow-x:auto}
+ .mobile-nav button{flex:1;min-width:0}
+}
+@media(max-width:380px){
+ .tool-gallery{grid-template-columns:1fr}
+ .top-actions .btn{font-size:11px}
+ .content{padding-inline:12px}
+ .panel{padding:14px}
+}
+@media(hover:none){.tile:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tile,.toast{transition:none}}

@@ -286,3 +286,27 @@ test("BOQ accountant checks missing price provenance",async({page})=>{
  await page.getByRole("button",{name:"Kiểm tra BOQ"}).click();
  await expect(page.locator("#boqAuditResult")).toContainText("PRICE-01");
 });
+
+test("Plan AI remembers AI counterpart when reopening",async({page})=>{
+ await page.goto("/#creative");await page.locator('.tool-gallery [data-open="plan"]').click();
+ await page.locator("#planTargetAI").selectOption("Claude");
+ await page.getByRole("button",{name:"← Tất cả công cụ"}).click();
+ await page.locator('.tool-gallery [data-open="plan"]').click();
+ await expect(page.locator("#planTargetAI")).toHaveValue("Claude");
+});
+test("BOQ preserves edits across navigation and refuses incomplete export",async({page})=>{
+ await page.goto("/#creative");await page.locator('.tool-gallery [data-open="boq"]').click();
+ await page.locator('[data-k="name"]').first().fill("Sàn gỗ");
+ await page.locator('[data-k="qty"]').first().fill("22");
+ await page.locator('[data-k="price"]').first().fill("300000");
+ await page.locator("#boqPriceSource").fill("Báo giá 06/10/2026");
+ await page.getByRole("button",{name:"↓ Xuất CSV"}).click();
+ await expect(page.locator("#toast")).toContainText("Sửa dữ liệu BOQ");
+ await page.locator('[data-k="unit"]').first().fill("m²");
+ await page.locator(".side [data-route=home]").click();
+ await page.locator(".side [data-route=creative]").click();
+ await page.locator('.tool-gallery [data-open="boq"]').click();
+ await expect(page.locator('[data-k="name"]').first()).toHaveValue("Sàn gỗ");
+ await expect(page.locator('[data-k="qty"]').first()).toHaveValue("22");
+ await expect(page.locator("#boqPriceSource")).toHaveValue("Báo giá 06/10/2026");
+});

@@ -2,12 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 const read=p=>readFileSync(new URL("../"+p,import.meta.url),"utf8");
-test("Design AI is native and does not use iframe",()=>{
+test("Design AI opens standalone website without iframe",()=>{
  const app=read("src/app.js");
- assert.match(app,/location\.assign\("https:\/\/hoanggiaktsda-beep\.github\.io\/da-studio\/"\)/);
- assert.match(app,/href="https:\/\/hoanggiaktsda-beep\.github\.io\/da-studio\/"/);
- assert.match(read("design-ai/index.html"),/src="\.\/app\.mjs"/);
- assert.doesNotMatch(read("design-ai/index.html"),/<iframe\b/i);
+ const legacy=read("design-ai/index.html");
+ assert.match(app,/"design":"https:\/\/hoanggiaktsda-beep\.github\.io\/da-studio\/"/);
+ assert.match(app,/location\.assign\(EXTERNAL_TOOLS\[id\]\)/);
+ assert.match(legacy,/location\.replace\("https:\/\/hoanggiaktsda-beep\.github\.io\/da-studio\/"\)/);
+ assert.doesNotMatch(legacy,/<iframe\b/i);
 });
 test("DA creator is limited to create and shares active project",()=>{
  const app=read("design-ai/app.mjs");

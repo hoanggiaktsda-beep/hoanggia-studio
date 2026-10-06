@@ -20,5 +20,5 @@ test("localized dropdowns preserve stored machine values",()=>{
 test("localized headings and refreshed offline cache",()=>{
  assert.match(app,/BỘ BIÊN SOẠN YÊU CẦU/);
  assert.doesNotMatch(app,/<h1>AI Tools<\/h1>/);
- assert.match(sw,/hoanggia-studio-v4\.6\.0/);
+ assert.match(sw,/hoanggia-studio-v4\.7\.0/);
 });

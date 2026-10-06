@@ -224,3 +224,28 @@ test("mobile dashboard shows only one create project action",async({page})=>{
  await page.setViewportSize({width:1366,height:900});
  await expect(page.locator("#projectCreate")).toBeVisible();
 });
+
+test("Plan AI V1 exposes reconstruction experts, 2D sheets and independent checker",async({page})=>{
+ await page.goto("/#creative");
+ await page.locator('.tool-gallery [data-open="plan"]').click();
+ await expect(page.getByRole("heading",{name:"Bản vẽ & mặt bằng"})).toBeVisible();
+ await expect(page.getByText("CAD Technical Architect",{exact:true})).toBeVisible();
+ await expect(page.getByText("3D Reconstruction Architect",{exact:true})).toBeVisible();
+ await expect(page.getByText("CAD Checker",{exact:true})).toBeVisible();
+ await expect(page.getByText("Drawing Coordinator",{exact:true})).toBeVisible();
+ await expect(page.locator(".plan-sheet")).toHaveCount(11);
+ await page.locator("#knownDimension").fill("cửa 900 mm");
+ await page.locator("#planBrief").fill("Thêm tủ rượu 2400 × 450, giữ lối đi 900 mm");
+ await page.getByRole("button",{name:"Tạo đặc tả tái dựng"}).click();
+ await expect(page.locator("#planSpec")).toContainText("mô hình hình học trung gian");
+ await page.getByRole("button",{name:"Tạo prompt CAD 2D"}).click();
+ await expect(page.locator("#planPromptResult")).toContainText("CAD TECHNICAL ARCHITECT");
+ await page.getByRole("button",{name:"Chạy kiểm tra hồ sơ"}).click();
+ await expect(page.locator("#planCheckResult")).toContainText("SRC-01");
+});
+test("Plan AI V1 remains contained on mobile",async({page})=>{
+ await page.setViewportSize({width:390,height:844});await page.goto("/#creative");
+ await page.locator('.tool-gallery [data-open="plan"]').click();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
+ await expect(page.locator(".plan-flow")).toBeVisible();
+});

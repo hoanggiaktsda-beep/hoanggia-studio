@@ -7,7 +7,7 @@ export const MODULES=[
 {id:"edit",label:"Edit AI",vi:"Chỉnh sửa & đồng bộ",group:"creative",icon:"▧",status:"local",repo:"https://github.com/hoanggiaktsda-beep/hoanggia-studioai",live:"https://hoanggiaktsda-beep.github.io/hoanggia-studioai/",detail:"ReferenceReplica, SpaceSync, khóa kiến trúc và góc máy"},
 {id:"video",label:"Video AI",vi:"Kịch bản & camera",group:"creative",icon:"▷",status:"local",repo:"https://github.com/hoanggiaktsda-beep/prompt-ai-videos",live:"https://hoanggiaktsda-beep.github.io/prompt-ai-videos/",detail:"Shot sequence, nhân vật, ánh sáng và chuyển động"},
 {id:"upscale",label:"Upscale AI",vi:"Nâng cấp ảnh",group:"creative",icon:"⬡",status:"local",repo:"https://github.com/hoanggiaktsda-beep/HG-UPSCALE-AI",live:"https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/",detail:"Phóng ảnh trên trình duyệt, không tự nhận là AI siêu phân giải"},
-{id:"visual",label:"Visual AI",vi:"Trực quan hóa",group:"creative",icon:"◇",status:"planned",detail:"Chưa xác minh ứng dụng nguồn để kết nối"},
+{id:"visual",label:"Visual AI",vi:"Trực quan hóa",group:"creative",icon:"◇",status:"local",detail:"Danh mục liên kết tới các nền tảng tạo ảnh độc lập"},
 {id:"plan",label:"Plan AI",vi:"Phân tích diện tích",group:"technical",icon:"▤",status:"local",detail:"Dữ liệu đo nhập thủ công, tính diện tích cơ bản"},
 {id:"material",label:"Material AI",vi:"Thư viện vật liệu",group:"technical",icon:"▦",status:"local",detail:"Bảng vật liệu tham chiếu, không phải dữ liệu nhà cung cấp"},
 {id:"boq",label:"BOQ AI",vi:"Khối lượng & dự toán",group:"technical",icon:"≡",status:"local",detail:"Dự toán theo số liệu và đơn giá do người dùng nhập"},

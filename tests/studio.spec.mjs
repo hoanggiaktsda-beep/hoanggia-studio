@@ -196,3 +196,22 @@ test("mobile workspace keeps all six destinations accessible",async({page})=>{
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2)).toBe(true);
  }
 });
+
+test("mobile dashboard never starts off-screen or permits sideways scrolling",async({page})=>{
+ for(const width of [320,375,390,393,430,600,760]){
+  await page.setViewportSize({width,height:844});
+  await page.goto("/#home");
+  await expect(page.locator(".frame")).toBeVisible();
+  const positions=await page.evaluate(()=>{
+   const selectors=[".frame","#view",".content",".mobile-nav"];
+   const boxes=selectors.map(s=>{const e=document.querySelector(s);if(!e)return null;const r=e.getBoundingClientRect();return {selector:s,left:r.left,right:r.right,width:r.width};}).filter(Boolean);
+   window.scrollTo(9999,0);
+   return {boxes,scrollX:window.scrollX,viewport:innerWidth,documentWidth:document.documentElement.scrollWidth};
+  });
+  for(const box of positions.boxes){
+   expect(box.left,box.selector+" starts offscreen at "+width).toBeGreaterThanOrEqual(-2);
+   expect(box.right,box.selector+" extends beyond "+width).toBeLessThanOrEqual(width+2);
+  }
+  expect(positions.scrollX,"horizontal pan at "+width).toBe(0);
+ }
+});

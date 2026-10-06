@@ -274,3 +274,14 @@ test("BOQ AI V1 calculates allowances and audits duplicate rows",async({page})=>
  await page.getByRole("button",{name:"Tính & lưu"}).click();
  await expect(page.locator("#boqSummary")).toContainText("1.155.000");
 });
+
+test("BOQ accountant checks missing price provenance",async({page})=>{
+ await page.goto("/#creative");await page.locator('.tool-gallery [data-open="boq"]').click();
+ await expect(page.getByText("Kế toán công trình",{exact:true})).toBeVisible();
+ await expect(page.getByText("Chuyên gia dự toán kiến trúc",{exact:true})).toBeVisible();
+ await page.locator('[data-k="name"]').first().fill("Sơn tường");
+ await page.locator('[data-k="qty"]').first().fill("12");
+ await page.locator('[data-k="price"]').first().fill("100000");
+ await page.getByRole("button",{name:"Kiểm tra BOQ"}).click();
+ await expect(page.locator("#boqAuditResult")).toContainText("PRICE-01");
+});

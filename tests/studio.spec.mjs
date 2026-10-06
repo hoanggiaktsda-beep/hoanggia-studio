@@ -160,3 +160,13 @@ test("material library ignores delayed results after navigating away",async({pag
  await page.locator('.side [data-route="projects"]').click();
  finish?.();await expect(page.getByRole("heading",{name:"Quản lý dự án"})).toBeVisible();
 });
+
+test("Visual AI opens external image platforms without changing other tools",async({page})=>{
+ await page.goto("/#creative");
+ await page.locator('.tool-gallery [data-open="visual"]').click();
+ for(const url of ["https://www.lovart.ai/","https://chatgpt.com/","https://labs.google/fx/tools/flow"]){
+  await expect(page.locator('a[href="'+url+'"]')).toHaveAttribute("target","_blank");
+ }
+ await page.getByRole("button",{name:/Tất cả công cụ/}).click();
+ for(const id of ["plan","material","boq"])await expect(page.locator('.tool-gallery [data-open="'+id+'"]')).toHaveCount(1);
+});

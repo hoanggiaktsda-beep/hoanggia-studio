@@ -379,3 +379,10 @@ img,video,canvas,svg{max-width:100%}
 @media(max-width:1100px){.visual-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.visual-hero{min-height:220px}.visual-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-card{min-height:170px}}
 @media(max-width:420px){.visual-grid{grid-template-columns:1fr}.visual-card{min-height:160px}}
+
+/* D&A Bespoke only: white background behind its original brand logo. */
+.visual-card[href="https://dabespoke.vn/"] .visual-avatar{
+  background-color:#fff;
+  border-color:#e9e9e9;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+}

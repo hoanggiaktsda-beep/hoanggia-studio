@@ -144,12 +144,12 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
 <button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
 <div class="hg-cad-export-panel" style="margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)">
-<strong>Xuất tệp dùng trong AutoCAD</strong>
+<strong>Xuất tệp dùng trong AutoCAD — phân biệt bản nguyên lý và bản số hóa</strong>
 <p style="font-size:12px;margin:8px 0">Tệp DXF là định dạng vector có thể mở trong AutoCAD và lưu lại thành DWG. Xuất DXF theo hình chiếu cần số hóa đường nét trước. Ảnh bản vẽ không tự chuyển thành CAD đầy đủ.</p>
 <div class="hg-cad-export-grid">
 <div><strong style="font-size:13px">DXF — Đường bao 2D</strong><p style="font-size:12px">Dữ liệu điểm đã chọn và hiệu chuẩn. Dùng nút xuất phía trên.</p></div>
-<div><strong style="font-size:13px">DXF — Bố cục hình chiếu</strong><p style="font-size:12px">Khung bố trí các hình chiếu theo kích thước nhập; chỉ là bản nguyên lý, không phải hình học chi tiết.</p><button type="button" id="hgCadLayoutExport">Tải DXF bố cục nguyên lý</button></div>
-<div><strong style="font-size:13px">DWG — Hồ sơ AutoCAD</strong><p style="font-size:12px">Chưa xuất DWG trực tiếp. Mở DXF bằng AutoCAD rồi dùng Save As → DWG.</p></div>
+<div><strong style="font-size:13px">DXF — Bố cục hình chiếu</strong><p style="font-size:12px">Chỉ xuất các khung bao kích thước, KHÔNG chứa đầu giường, đệm, chân giường hay đường cong. Không dùng làm bản vẽ chi tiết.</p><button type="button" id="hgCadLayoutExport">Tải DXF khung bao (không có chi tiết)</button></div>
+<div><strong style="font-size:13px">DXF — Các hình chiếu đã số hóa</strong><p style="font-size:12px">Gộp các hình chiếu đã đánh dấu thủ công thành một tệp DXF, mỗi hình chiếu trên layer riêng. Có thể mở trong AutoCAD và lưu DWG; chưa tự chuyển ảnh thành CAD chi tiết.</p><button type="button" id="hgCadExportAll">Tải DXF các hình chiếu đã số hóa</button><p style="font-size:12px">DWG trực tiếp: chưa hỗ trợ.</p></div>
 </div>
 <p id="hgCadExportStatus" role="status" aria-live="polite" style="font-size:12px;margin:8px 0 0"></p>
 </div>
@@ -328,6 +328,24 @@ text("HG-NOTES",0,-6*labelH,"UNVERIFIED INTERNAL GEOMETRY - NOT FOR FABRICATION"
 add(0,"ENDSEC");add(0,"EOF");
 const blob=new Blob([lines.join("\n")+"\n"],{type:"application/dxf"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="HOANGGIA-CAD-BO-CUC-NGUYEN-LY.dxf";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 status.textContent="Đã tạo DXF bố cục nguyên lý. Các khung chỉ thể hiện kích thước tổng thể; không có chi tiết hình học từ ảnh.";
+});
+// Keep independently traced contours for each orthographic view; never replace details with boxes.
+const hgTraces={};let hgActiveView=val("hgTraceView");
+function hgSaveTrace(){hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};}
+get("hgTraceView").addEventListener("change",()=>{hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};hgActiveView=val("hgTraceView");const v=hgTraces[hgActiveView];tracePoints=v?v.points.map(p=>p.slice()):[];traceCal=v?v.cal.map(p=>p.slice()):[];get("hgTraceMm").value=v?v.mm:"";get("hgTraceClosed").checked=v?v.closed:true;traceDraw();traceStatus("Đang số hóa "+hgActiveView+". Số điểm: "+tracePoints.length+". Mỗi hình chiếu được lưu riêng trong phiên làm việc.");});
+get("hgCadExportAll").addEventListener("click",()=>{
+hgSaveTrace();const views=Object.entries(hgTraces).filter(([name,v])=>v.points.length>=2&&v.cal.length===2&&Number(v.mm)>0&&Math.hypot(v.cal[1][0]-v.cal[0][0],v.cal[1][1]-v.cal[0][1])>=1);
+if(!views.length){get("hgCadExportStatus").textContent="Chưa có hình chiếu nào được số hóa đủ điểm và hiệu chuẩn. Không thể xuất CAD chi tiết từ ảnh chỉ bằng kích thước tổng thể.";return;}
+const out=[],add=(k,v)=>out.push(String(k),String(v));add(0,"SECTION");add(2,"HEADER");add(9,"$ACADVER");add(1,"AC1009");add(9,"$INSUNITS");add(70,4);add(0,"ENDSEC");add(0,"SECTION");add(2,"TABLES");add(0,"TABLE");add(2,"LAYER");add(70,views.length);
+for(const [name] of views){add(0,"LAYER");add(2,"HG-"+name);add(70,0);add(62,7);add(6,"CONTINUOUS");}
+add(0,"ENDTAB");add(0,"ENDSEC");add(0,"SECTION");add(2,"ENTITIES");
+let xOffset=0;
+for(const [name,v] of views){const d=Math.hypot(v.cal[1][0]-v.cal[0][0],v.cal[1][1]-v.cal[0][1]),scale=Number(v.mm)/d,coords=v.points.map(p=>[(p[0]-v.cal[0][0])*scale,(v.cal[0][1]-p[1])*scale]);const minX=Math.min(...coords.map(p=>p[0])),maxX=Math.max(...coords.map(p=>p[0])),minY=Math.min(...coords.map(p=>p[1]));const layer="HG-"+name;
+add(0,"POLYLINE");add(8,layer);add(66,1);add(70,v.closed&&coords.length>2?1:0);add(10,0);add(20,0);add(30,0);
+for(const p of coords){add(0,"VERTEX");add(8,layer);add(10,Number((p[0]-minX+xOffset).toFixed(5)));add(20,Number((p[1]-minY).toFixed(5)));add(30,0);}
+add(0,"SEQEND");add(8,layer);xOffset+=maxX-minX+Math.max(150,Number(v.mm)*.15);}
+add(0,"ENDSEC");add(0,"EOF");const blob=new Blob([out.join("\n")+"\n"],{type:"application/dxf"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="HOANGGIA-CAC-HINH-CHIEU-DA-SO-HOA.dxf";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+get("hgCadExportStatus").textContent="Đã xuất "+views.length+" hình chiếu đã số hóa sang các layer riêng. Chỉ bao gồm nét đã đánh dấu, không tự tạo cấu tạo hay chi tiết khuất.";
 });
 get("hgTraceExport").addEventListener("click",()=>{
 const mm=Number(val("hgTraceMm"));

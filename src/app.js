@@ -244,8 +244,8 @@ function updateCadDescriptions(){get("hgCadProjectionHelp").textContent=cadProje
 const modeHelp={cad:"<strong>01 — AI bản vẽ CAD:</strong> Dùng khi cần phân tích mặt bằng, bản vẽ 2D, bố trí không gian, hệ trục, kích thước và các hình chiếu. Kết quả hướng đến hồ sơ CAD có cấu trúc, không phải bản vẽ thi công tự động.",interior:"<strong>02 — AI CAD nội thất:</strong> Dùng để phân tích và tái dựng đồ nội thất rời như sofa, ghế, bàn, giường, tủ, kệ và đôn. Ưu tiên đường bao, hình chiếu, kích thước, đường cong và tính đồng bộ giữa các mặt.",shop:"<strong>03 — AI bản vẽ thi công:</strong> Dùng khi cần rà soát cấu tạo, vật liệu, liên kết, chi tiết lắp ráp và kích thước phục vụ sản xuất, thi công. Phần không nhìn thấy hoặc chưa có dữ liệu phải ghi rõ cần xác nhận; không tự tạo chi tiết."};
 function updateRouting(){get("hgCadModeHelp").innerHTML=modeHelp[val("hgCadMode")];const people=routing[val("hgCadObject")]||routing.custom;get("hgCadRouting").textContent="Chủ đạo: "+people[0]+" · Hỗ trợ: "+people.slice(1).join(" · ");}
 function build(){
-const views=[...document.querySelectorAll("[data-hg-view]:checked")].map(x=>x.dataset.hgView);
-const people=routing[val("hgCadObject")];
+const views=[...get("hgCadViews").querySelectorAll("[data-hg-view]:checked")].map(x=>x.dataset.hgView);
+const people=routing[val("hgCadObject")]||routing.custom;
 const file=get("hgCadFile").files[0];
 const dimensions=[["Dài",val("hgCadLength")],["Rộng / Sâu",val("hgCadDepth")],["Cao",val("hgCadHeight")]];
 const validDimensions=dimensions.map(([name,raw])=>[name,raw.trim(),raw.trim()!==""&&Number.isFinite(Number(raw))&&Number(raw)>0]);
@@ -317,7 +317,8 @@ traceCtx.fillStyle="#ffbd57";traceCal.forEach(p=>{traceCtx.beginPath();traceCtx.
 if(traceCal.length===2){traceCtx.strokeStyle="#ffbd57";traceCtx.beginPath();traceCtx.moveTo(...traceCal[0]);traceCtx.lineTo(...traceCal[1]);traceCtx.stroke();}
 }
 function traceLoad(){
-const f=get("hgCadFile").files[0];tracePoints=[];traceCal=[];traceImage=null;
+const f=get("hgCadFile").files[0];tracePoints=[];traceCal=[];traceImage=null;traceCalMode=false;
+if(typeof hgTraces!=="undefined"){for(const key of Object.keys(hgTraces))delete hgTraces[key];hgActiveView=val("hgTraceView");get("hgTraceMm").value="";get("hgTraceClosed").checked=true;get("hgCadSheetViews").textContent="Đã đổi ảnh nguồn; dữ liệu số hóa cũ đã xóa để tránh trộn hình học giữa các sản phẩm.";}
 if(!f||!f.type.startsWith("image/")){traceCanvas.width=800;traceCanvas.height=400;traceDraw();traceStatus("Chọn ảnh JPG/PNG để bắt đầu số hóa đường bao.");return;}
 const url=URL.createObjectURL(f),im=new Image();
 im.onload=()=>{traceImage=im;const scale=Math.min(1,1200/im.naturalWidth,900/im.naturalHeight);traceCanvas.width=Math.max(1,Math.round(im.naturalWidth*scale));traceCanvas.height=Math.max(1,Math.round(im.naturalHeight*scale));traceDraw();traceStatus("Ảnh đã tải. Bấm Đặt 2 điểm chuẩn, chọn hai điểm có khoảng cách thực đã biết, sau đó bấm các điểm đường bao.");URL.revokeObjectURL(url);};
@@ -341,10 +342,10 @@ get("hgCadFile").addEventListener("change",hgUpdateReferenceSheet);
 ["hgCadObject","hgCadCustomName","hgCadLength","hgCadDepth","hgCadHeight","hgCadDimSource"].forEach(id=>get(id).addEventListener("input",hgUpdateSheetDetails));
 hgUpdateSheetDetails();
 
-traceCanvas.addEventListener("click",e=>{if(!traceImage)return;const rect=traceCanvas.getBoundingClientRect(),x=(e.clientX-rect.left)*traceCanvas.width/rect.width,y=(e.clientY-rect.top)*traceCanvas.height/rect.height;if(traceCalMode){if(traceCal.length===2)traceCal=[];traceCal.push([x,y]);if(traceCal.length===2)traceCalMode=false;}else tracePoints.push([x,y]);traceDraw();traceStatus("Điểm đường bao: "+tracePoints.length+" · Điểm chuẩn: "+traceCal.length+"/2");});
+traceCanvas.addEventListener("click",e=>{if(!traceImage)return;const rect=traceCanvas.getBoundingClientRect(),x=(e.clientX-rect.left)*traceCanvas.width/rect.width,y=(e.clientY-rect.top)*traceCanvas.height/rect.height;if(traceCalMode){if(traceCal.length===2)traceCal=[];traceCal.push([x,y]);if(traceCal.length===2)traceCalMode=false;}else tracePoints.push([x,y]);traceDraw();hgSaveTrace();traceStatus("Điểm đường bao: "+tracePoints.length+" · Điểm chuẩn: "+traceCal.length+"/2");});
 get("hgTraceCalibrate").addEventListener("click",()=>{traceCal=[];traceCalMode=true;traceDraw();traceStatus("Chọn chính xác hai điểm trên ảnh có khoảng cách thực đã biết.");});
-get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();});
-get("hgTraceClear").addEventListener("click",()=>{tracePoints=[];traceDraw();traceStatus("Đã xóa đường bao, giữ nguyên điểm hiệu chuẩn.");});
+get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();hgSaveTrace();});
+get("hgTraceClear").addEventListener("click",()=>{tracePoints=[];traceDraw();hgSaveTrace();traceStatus("Đã xóa đường bao, giữ nguyên điểm hiệu chuẩn.");});
 get("hgTraceClosed").addEventListener("change",traceDraw);
 get("hgAutoExport").addEventListener("click",()=>{
 const status=get("hgAutoStatus"),widthMM=Number(val("hgAutoWidth")),threshold=Number(val("hgAutoThreshold")),minRun=Number(val("hgAutoMinRun"));
@@ -389,8 +390,10 @@ status.textContent="Đã tạo DXF bố cục nguyên lý. Các khung chỉ th�
 });
 // Keep independently traced contours for each orthographic view; never replace details with boxes.
 const hgTraces={};let hgActiveView=val("hgTraceView");
-function hgSaveTrace(){hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};}
-get("hgTraceView").addEventListener("change",()=>{hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};hgActiveView=val("hgTraceView");const v=hgTraces[hgActiveView];tracePoints=v?v.points.map(p=>p.slice()):[];traceCal=v?v.cal.map(p=>p.slice()):[];get("hgTraceMm").value=v?v.mm:"";get("hgTraceClosed").checked=v?v.closed:true;traceDraw();traceStatus("Đang số hóa "+hgActiveView+". Số điểm: "+tracePoints.length+". Mỗi hình chiếu được lưu riêng trong phiên làm việc.");});
+function hgSaveTrace(){hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};hgRefreshViewStatus();}
+function hgRefreshViewStatus(){const rows=Object.entries(hgTraces).filter(([,v])=>v.points.length>0).map(([name,v])=>name+": "+v.points.length+" điểm"+(v.cal.length===2&&Number(v.mm)>0?" · đã hiệu chuẩn":" · chưa đủ hiệu chuẩn"));get("hgCadSheetViews").textContent=rows.length?rows.join(" | "):"Chưa có đường nét được số hóa. Mỗi hình chiếu cần dữ liệu riêng.";}
+get("hgTraceView").addEventListener("change",()=>{hgTraces[hgActiveView]={points:tracePoints.map(p=>p.slice()),cal:traceCal.map(p=>p.slice()),mm:val("hgTraceMm"),closed:get("hgTraceClosed").checked,imageWidth:traceCanvas.width,imageHeight:traceCanvas.height};hgActiveView=val("hgTraceView");const v=hgTraces[hgActiveView];tracePoints=v?v.points.map(p=>p.slice()):[];traceCal=v?v.cal.map(p=>p.slice()):[];get("hgTraceMm").value=v?v.mm:"";get("hgTraceClosed").checked=v?v.closed:true;traceDraw();hgRefreshViewStatus();traceStatus("Đang số hóa "+hgActiveView+". Số điểm: "+tracePoints.length+". Mỗi hình chiếu được lưu riêng trong phiên làm việc.");});
+["hgTraceMm","hgTraceClosed"].forEach(id=>get(id).addEventListener("change",hgSaveTrace));
 get("hgCadExportAll").addEventListener("click",()=>{
 hgSaveTrace();const views=Object.entries(hgTraces).filter(([name,v])=>v.points.length>=2&&v.cal.length===2&&Number(v.mm)>0&&Math.hypot(v.cal[1][0]-v.cal[0][0],v.cal[1][1]-v.cal[0][1])>=1);
 if(!views.length){get("hgCadExportStatus").textContent="Chưa có hình chiếu nào được số hóa đủ điểm và hiệu chuẩn. Không thể xuất CAD chi tiết từ ảnh chỉ bằng kích thước tổng thể.";return;}

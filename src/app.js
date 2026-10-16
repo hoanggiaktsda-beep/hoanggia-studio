@@ -119,13 +119,18 @@ shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padd
 <label>Phạm vi<select id="hgCadScope">${opt([["all","Phân tích và tái dựng"],["geometry","Chỉ hình học 2D"],["details","Chi tiết có căn cứ"],["audit","Kiểm tra đồng bộ CAD"]])}</select></label>
 </div>
 <label>Ảnh / tài liệu tham chiếu <input id="hgCadFile" type="file" accept="image/*,.pdf,.dxf,.dwg"></label>
-<p id="hgCadFileStatus" style="font-size:13px">Chưa chọn tệp. Tệp chỉ được đọc tên và loại, không tải lên máy chủ.</p>
+<p id="hgCadFileStatus" style="font-size:13px">Chưa chọn tệp. Ảnh được xem trước ngay trong trình duyệt, không tải lên máy chủ.</p>
+<div id="hgCadPreviewWrap" hidden style="margin:12px 0;padding:12px;border:1px solid #3c4a5a;border-radius:12px">
+<img id="hgCadPreview" alt="Ảnh tham chiếu CAD" style="display:block;max-width:100%;max-height:440px;object-fit:contain;margin:auto" />
+<p id="hgCadImageMeta" style="font-size:12px;margin:8px 0"></p>
+</div>
 <label>Ghi chú và kích thước đã xác minh<textarea id="hgCadNotes" rows="3" placeholder="Mô tả đối tượng, nguồn kích thước, bộ phận khuất, thông số xác nhận..."></textarea></label>
 <h3>Hình chiếu yêu cầu</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${["TOP","FRONT","BACK","LEFT","RIGHT","SECTION"].map(v=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+v+'</label>').join('')}</div>
 <h3>Hội đồng chuyên gia tham chiếu</h3><p id="hgCadRouting"></p>
 <details><summary>Danh mục đầy đủ 32 chuyên gia / 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
 <h3>Đặc tả kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>
-<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button id="hgCadBuild" type="button">Tạo đặc tả</button><button id="hgCadCopy" type="button">Sao chép đặc tả</button><button id="hgCadDownload" type="button">Tải đặc tả .txt</button></div>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button id="hgCadBuild" type="button">Tạo prompt CAD theo ảnh</button><button id="hgCadCopy" type="button">Sao chép prompt</button><button id="hgCadDownload" type="button">Tải prompt .txt</button><button id="hgCadOpenAI" type="button">Mở ChatGPT để dựng bản vẽ</button></div>
+<p style="font-size:13px">Quy trình: chọn ảnh → xem trước → tạo prompt → sao chép → mở ChatGPT → đính kèm chính ảnh gốc và dán prompt. Website chưa thể tự chuyển tệp ảnh vào cuộc trò chuyện ChatGPT.</p>
 <p id="hgCadMessage" role="status" aria-live="polite" style="font-size:13px;margin-top:10px"></p>
 </section>`);
 const get=id=>document.getElementById(id), val=id=>get(id).value;
@@ -146,6 +151,8 @@ const lines=[
 "Chuyên gia hỗ trợ: "+people.slice(1).join(", "),
 "Ghi chú: "+(notes||"Không có"),
 "",
+"NHIỆM VỤ AI THỊ GIÁC: Phân tích trực tiếp NỘI DUNG ẢNH ĐƯỢC ĐÍNH KÈM trong cuộc trò chuyện AI. Nhận diện đối tượng, bộ phận nhìn thấy, đường bao, đường cong, góc chụp, mức độ che khuất và vật liệu quan sát được. Không được chỉ dựa vào tên tệp. Nếu không có ảnh đính kèm trong cuộc trò chuyện, yêu cầu người dùng tải ảnh lên và dừng việc phân tích hình học.",
+"QUY TẮC ẢNH: Giữ nguyên thiết kế, không thêm bộ phận, không bịa phần khuất. Ảnh phối cảnh không cung cấp đủ kích thước thực; yêu cầu ít nhất một kích thước chuẩn hoặc bản vẽ tỷ lệ để xác định mm. Các hình chiếu thiếu dữ liệu phải ghi CẦN XÁC NHẬN.",
 "QUY TRÌNH: (1) Phân tích nguồn (2) Xác minh kích thước (3) Mô hình hình học trung gian thống nhất (4) TOP/FRONT/BACK/LEFT/RIGHT (5) SECTION nếu đủ căn cứ (6) Lớp nét CAD (7) Kiểm tra đồng bộ (8) Xuất tệp chỉ khi công cụ thực tế hỗ trợ.",
 "PHÂN LOẠI: XÁC NHẬN / SUY LUẬN / CẦN XÁC NHẬN.",
 "KHÓA AN TOÀN: Không tự thêm chi tiết khuất, cấu tạo, kích thước hoặc vật liệu; không biến suy luận thành dữ liệu đã xác minh. Không tự tuyên bố đủ điều kiện thi công. Các nhân vật là nguồn tham chiếu phương pháp, không phải người kiểm duyệt thực tế.",
@@ -159,8 +166,27 @@ get("hgCadMessage").textContent=size?"Đã tạo đặc tả; cần kiểm chứ
 get("hgCadObject").addEventListener("change",()=>{updateRouting();build()});
 ["hgCadMode","hgCadSource","hgCadSize","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
 document.querySelectorAll("[data-hg-view]").forEach(el=>el.addEventListener("change",build));
-get("hgCadFile").addEventListener("change",()=>{const f=get("hgCadFile").files[0];get("hgCadFileStatus").textContent=f?"Đã chọn: "+f.name+" ("+Math.round(f.size/1024)+" KB). Chưa phân tích nội dung tệp.":"Chưa chọn tệp.";build()});
+let previewUrl=null;
+get("hgCadFile").addEventListener("change",()=>{
+const f=get("hgCadFile").files[0],wrap=get("hgCadPreviewWrap"),img=get("hgCadPreview");
+if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null;}
+wrap.hidden=true;img.removeAttribute("src");
+get("hgCadImageMeta").textContent="";
+if(!f){get("hgCadFileStatus").textContent="Chưa chọn tệp.";build();return;}
+get("hgCadFileStatus").textContent="Đã chọn: "+f.name+" ("+Math.round(f.size/1024)+" KB). "+(f.type.startsWith("image/")?"Đang xem trước ảnh tại trình duyệt.":"Định dạng này chưa hỗ trợ xem trước nội dung.");
+if(f.type.startsWith("image/")){
+previewUrl=URL.createObjectURL(f);img.onload=()=>{get("hgCadImageMeta").textContent="Độ phân giải: "+img.naturalWidth+" × "+img.naturalHeight+" px · Đây chỉ là thông số ảnh, không phải kích thước CAD.";};
+img.onerror=()=>{wrap.hidden=true;get("hgCadFileStatus").textContent="Không thể xem trước ảnh này.";};
+img.src=previewUrl;wrap.hidden=false;
+}
+build();
+});
 get("hgCadBuild").addEventListener("click",build);
+get("hgCadOpenAI").addEventListener("click",async()=>{
+build();
+try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép prompt. Trong ChatGPT hãy đính kèm ảnh gốc rồi dán prompt."; }catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép prompt được chọn, sau đó đính kèm ảnh trong ChatGPT.";}
+window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
+});
 get("hgCadCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép đặc tả."}catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép văn bản đang được chọn."}});
 get("hgCadDownload").addEventListener("click",()=>{const blob=new Blob([get("hgCadPrompt").value],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="HOANGGIA-INTERIOR-CAD-SPEC.txt";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
 updateRouting();build();

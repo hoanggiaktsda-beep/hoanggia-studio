@@ -143,6 +143,16 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <label style="display:flex;align-items:center;gap:8px"><input id="hgTraceClosed" type="checkbox" checked> Khép kín đường bao</label>
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
 <button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
+<div class="hg-cad-export-panel" style="margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)">
+<strong>Xuất tệp dùng trong AutoCAD</strong>
+<p style="font-size:12px;margin:8px 0">Tệp DXF là định dạng vector có thể mở trong AutoCAD và lưu lại thành DWG. Xuất DXF theo hình chiếu cần số hóa đường nét trước. Ảnh bản vẽ không tự chuyển thành CAD đầy đủ.</p>
+<div class="hg-cad-export-grid">
+<div><strong style="font-size:13px">DXF — Đường bao 2D</strong><p style="font-size:12px">Dữ liệu điểm đã chọn và hiệu chuẩn. Dùng nút xuất phía trên.</p></div>
+<div><strong style="font-size:13px">DXF — Bố cục hình chiếu</strong><p style="font-size:12px">Khung bố trí các hình chiếu theo kích thước nhập; chỉ là bản nguyên lý, không phải hình học chi tiết.</p><button type="button" id="hgCadLayoutExport">Tải DXF bố cục nguyên lý</button></div>
+<div><strong style="font-size:13px">DWG — Hồ sơ AutoCAD</strong><p style="font-size:12px">Chưa xuất DWG trực tiếp. Mở DXF bằng AutoCAD rồi dùng Save As → DWG.</p></div>
+</div>
+<p id="hgCadExportStatus" role="status" aria-live="polite" style="font-size:12px;margin:8px 0 0"></p>
+</div>
 </details><style>
 .hg-plan-panel,.hg-plan-panel *{box-sizing:border-box}
 .hg-plan-panel{width:min(100% - 24px,1160px);max-width:1160px!important;margin:20px auto!important;padding:clamp(14px,2.4vw,28px)!important;min-width:0;overflow-x:clip}
@@ -193,6 +203,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 @media(max-width:699px){.hg-plan-panel details{padding:12px}.hg-plan-panel button{font-size:13px}.hg-plan-panel h3{margin-top:18px}}
  .hg-cad-dim-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.hg-cad-dim-grid label{min-width:0}.hg-cad-dimensions{grid-column:1/-1}@media(max-width:560px){.hg-cad-dim-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hg-cad-dim-grid label:last-child{grid-column:1/-1}}
 .hg-plan-panel .hg-cad-setting{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:12px}.hg-plan-panel .hg-cad-help{font-size:12px;line-height:1.55;color:var(--muted);margin:9px 0 0;min-height:54px}@media(max-width:650px){.hg-plan-panel .hg-cad-help{min-height:0}}
+.hg-cad-export-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.hg-cad-export-grid>div{min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px}@media(max-width:740px){.hg-cad-export-grid{grid-template-columns:1fr}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
@@ -296,6 +307,28 @@ get("hgTraceCalibrate").addEventListener("click",()=>{traceCal=[];traceCalMode=t
 get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();});
 get("hgTraceClear").addEventListener("click",()=>{tracePoints=[];traceDraw();traceStatus("Đã xóa đường bao, giữ nguyên điểm hiệu chuẩn.");});
 get("hgTraceClosed").addEventListener("change",traceDraw);
+get("hgCadLayoutExport").addEventListener("click",()=>{
+const status=get("hgCadExportStatus"),L=Number(val("hgCadLength")),W=Number(val("hgCadDepth")),H=Number(val("hgCadHeight"));
+if(![L,W,H].every(n=>Number.isFinite(n)&&n>0)){status.textContent="Cần nhập đủ 3 kích thước dương (dài, rộng/sâu, cao) trước khi tạo DXF bố cục.";return;}
+if(val("hgCadDimSource")==="unconfirmed"){status.textContent="Kích thước chưa được xác nhận. Chọn nguồn số đo phù hợp trước khi xuất; bản nguyên lý vẫn cần kiểm chứng.";return;}
+const lines=[],add=(k,v)=>{lines.push(String(k),String(v))};
+const safe=(n)=>Number(n.toFixed(4));
+function line(layer,x1,y1,x2,y2){add(0,"LINE");add(8,layer);add(10,safe(x1));add(20,safe(y1));add(30,0);add(11,safe(x2));add(21,safe(y2));add(31,0);}
+function text(layer,x,y,t,h){add(0,"TEXT");add(8,layer);add(10,safe(x));add(20,safe(y));add(30,0);add(40,h);add(1,t);}
+function rect(layer,x,y,w,h){line(layer,x,y,x+w,y);line(layer,x+w,y,x+w,y+h);line(layer,x+w,y+h,x,y+h);line(layer,x,y+h,x,y);}
+const gap=Math.max(L,W,H)*.16,labelH=Math.max(25,Math.min(65,H*.08)),layout=[
+["TOP",0,0,W,L],["FRONT",W+gap,0,W,H],["BACK",W+gap+W+gap,0,W,H],["LEFT",0,L+gap,L,H],["RIGHT",L+gap,L+gap,L,H]];
+add(0,"SECTION");add(2,"HEADER");add(9,"$ACADVER");add(1,"AC1009");add(9,"$INSUNITS");add(70,4);add(0,"ENDSEC");
+add(0,"SECTION");add(2,"TABLES");add(0,"TABLE");add(2,"LAYER");add(70,2);
+for(const [name,color] of [["HG-OUTLINE",7],["HG-NOTES",2]]){add(0,"LAYER");add(2,name);add(70,0);add(62,color);add(6,"CONTINUOUS");}
+add(0,"ENDTAB");add(0,"ENDSEC");add(0,"SECTION");add(2,"ENTITIES");
+for(const [name,x,y,w,h] of layout){rect("HG-OUTLINE",x,y,w,h);text("HG-NOTES",x,y-1.5*labelH,name+" - SCHEMATIC ONLY",labelH);}
+text("HG-NOTES",0,-4*labelH,"DIMENSIONS MM: LENGTH "+L+" / WIDTH "+W+" / HEIGHT "+H,labelH);
+text("HG-NOTES",0,-6*labelH,"UNVERIFIED INTERNAL GEOMETRY - NOT FOR FABRICATION",labelH);
+add(0,"ENDSEC");add(0,"EOF");
+const blob=new Blob([lines.join("\n")+"\n"],{type:"application/dxf"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="HOANGGIA-CAD-BO-CUC-NGUYEN-LY.dxf";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+status.textContent="Đã tạo DXF bố cục nguyên lý. Các khung chỉ thể hiện kích thước tổng thể; không có chi tiết hình học từ ảnh.";
+});
 get("hgTraceExport").addEventListener("click",()=>{
 const mm=Number(val("hgTraceMm"));
 if(!traceImage||tracePoints.length<2||traceCal.length!==2||!Number.isFinite(mm)||mm<=0){traceStatus("Chưa đủ điều kiện: cần ảnh, ít nhất 2 điểm đường bao, 2 điểm chuẩn và chiều dài chuẩn mm > 0.");return;}

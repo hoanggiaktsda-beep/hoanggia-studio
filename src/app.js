@@ -229,7 +229,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
-<div class="hg-cad-views">${[["TOP","Mặt bằng"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"],["SECTION","Mặt cắt"]].map(([v,label])=>'<label class="hg-cad-view"><input type="checkbox" data-hg-view="'+v+'" checked><span>'+label+'</span></label>').join('')}</div>
+<div class="hg-cad-views" id="hgCadViews">${[["TOP","Mặt bằng"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"],["SECTION","Mặt cắt"]].map(([v,label])=>'<label class="hg-cad-view"><input type="checkbox" data-hg-view="'+v+'" checked><span>'+label+'</span></label>').join('')}</div>
 <h3>Hội đồng chuyên gia tham chiếu</h3><p id="hgCadRouting"></p>
 <details><summary>Danh sách 32 chuyên gia tham chiếu thuộc 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
 <h3>Hướng dẫn phân tích và triển khai kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>

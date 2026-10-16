@@ -104,19 +104,20 @@ const expertGroups=[
 ["Sản xuất lắp ghép","George Nakashima","James Krenov","Gerrit Rietveld","Michael Thonet"],
 ["Kiểm soát chất lượng","W. Edwards Deming","Joseph M. Juran","Genichi Taguchi","Kaoru Ishikawa"]
 ];
-const routing={sofa:["Antonio Citterio","Patricia Urquiola","Niels Diffrient","Charles Eames"],chair:["Hans J. Wegner","Henry Dreyfuss","Niels Diffrient","Konstantin Grcic"],cabinet:["Dieter Rams","Piero Lissoni","James Krenov","John Pawson"],table:["Jean-Marie Massaud","Naoto Fukasawa","Gerrit Rietveld","Konstantin Grcic"],space:["Vincent Van Duysen","John Pawson","Peter Zumthor","Tadao Ando"],complex:["David Rutten","Arturo Tedeschi","Robert Aish","Achim Menges"]};
+const routing={bed:["Piero Lissoni","Patricia Urquiola","Henry Dreyfuss","James Krenov"],stool:["Hans J. Wegner","Naoto Fukasawa","Niels Diffrient","Michael Thonet"],shelf:["Dieter Rams","Piero Lissoni","James Krenov","Gerrit Rietveld"],sofa:["Antonio Citterio","Patricia Urquiola","Niels Diffrient","Charles Eames"],chair:["Hans J. Wegner","Henry Dreyfuss","Niels Diffrient","Konstantin Grcic"],cabinet:["Dieter Rams","Piero Lissoni","James Krenov","John Pawson"],table:["Jean-Marie Massaud","Naoto Fukasawa","Gerrit Rietveld","Konstantin Grcic"],space:["Vincent Van Duysen","John Pawson","Peter Zumthor","Tadao Ando"],complex:["David Rutten","Arturo Tedeschi","Robert Aish","Achim Menges"]};
 const opt=(a)=>a.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('');
 shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padding:24px">
-<span class="eyebrow">HOANGGIA INTERIOR CAD AI / EXPERT ORCHESTRATOR V1.0</span>
+<span class="eyebrow">HOANGGIA AI / ĐIỀU PHỐI CHUYÊN GIA BẢN VẼ</span>
 <h2>Bản vẽ & mặt bằng</h2><p>Phân tích nguồn, xác minh hình học và tạo đặc tả triển khai CAD nội thất. Hội đồng 32 chuyên gia tham chiếu thuộc 8 nhóm chuyên môn.</p>
-<div class="notice">Công cụ hiện hỗ trợ cấu hình, điều phối chuyên gia, kiểm tra dữ liệu đầu vào và xuất bản đặc tả văn bản. Chưa tự dựng hình chiếu hoặc xuất DXF/DWG.</div>
+<div class="notice">Công cụ hỗ trợ thiết lập nhiệm vụ, xem ảnh, tạo hướng dẫn phân tích và số hóa thủ công đường bao 2D để xuất DXF. Chưa tự động phân tích hình học từ ảnh hoặc xuất bản vẽ DWG hoàn chỉnh.</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px;margin:18px 0">
-<label>Chuyên gia CAD<select id="hgCadMode">${opt([["interior","02 — INTERIOR CAD AI"],["cad","01 — CAD AI"],["shop","03 — SHOPDRAWING AI"]])}</select></label>
-<label>Loại đối tượng<select id="hgCadObject">${opt([["sofa","Sofa / Armchair"],["chair","Ghế ăn / Ghế làm việc"],["cabinet","Tủ / Kệ / Module"],["table","Bàn / Bàn trà"],["space","Không gian nội thất"],["complex","Hình học phức tạp"]])}</select></label>
-<label>Loại nguồn<select id="hgCadSource">${opt([["render","Ảnh render / 3D"],["photo","Ảnh chụp thực tế"],["drawing","Bản vẽ / PDF"],["cad","Tệp CAD"]])}</select></label>
-<label>Kích thước chuẩn (mm)<input id="hgCadSize" placeholder="D 900 × S 450 × C 800" autocomplete="off"></label>
+<label>Lĩnh vực chuyên môn<select id="hgCadMode">${opt([["interior","02 — AI CAD nội thất"],["cad","01 — AI bản vẽ CAD"],["shop","03 — AI bản vẽ thi công"]])}</select></label>
+<div id="hgCadModeHelp" class="notice" style="margin:10px 0 16px;font-size:13px;line-height:1.6" role="status" aria-live="polite"></div>
+<label>Đối tượng cần triển khai<select id="hgCadObject">${opt([["sofa","Sofa / Ghế bành"],["bed","Giường / Giường bọc nệm"],["stool","Ghế đôn / Băng ghế"],["shelf","Kệ rời / Tủ trang trí"],["chair","Ghế ăn / Ghế làm việc / Ghế quầy bar"],["cabinet","Tủ rời / Kệ / Cụm nội thất"],["table","Bàn ăn / Bàn trà / Bàn phụ"],["space","Không gian nội thất"],["complex","Hình học phức tạp"]])}</select></label>
+<label>Loại nguồn<select id="hgCadSource">${opt([["render","Ảnh diễn họa / Mô hình 3D"],["photo","Ảnh chụp thực tế"],["drawing","Bản vẽ / PDF"],["cad","Tệp bản vẽ CAD"]])}</select></label>
+<label>Kích thước chuẩn (mm)<input id="hgCadSize" placeholder="Dài 900 × Sâu 450 × Cao 800" autocomplete="off"></label>
 <label>Quy ước chiếu<select id="hgCadProjection">${opt([["unconfirmed","Chưa xác nhận"],["first","Góc chiếu thứ nhất"],["third","Góc chiếu thứ ba"]])}</select></label>
-<label>Phạm vi<select id="hgCadScope">${opt([["all","Phân tích và tái dựng"],["geometry","Chỉ hình học 2D"],["details","Chi tiết có căn cứ"],["audit","Kiểm tra đồng bộ CAD"]])}</select></label>
+<label>Phạm vi<select id="hgCadScope">${opt([["all","Phân tích và dựng lại bản vẽ"],["geometry","Chỉ dựng hình học hai chiều"],["details","Chi tiết có căn cứ"],["audit","Kiểm tra tính thống nhất bản vẽ"]])}</select></label>
 </div>
 <label>Ảnh / tài liệu tham chiếu <input id="hgCadFile" type="file" accept="image/*,.pdf,.dxf,.dwg"></label>
 <p id="hgCadFileStatus" style="font-size:13px">Chưa chọn tệp. Ảnh được xem trước ngay trong trình duyệt, không tải lên máy chủ.</p>
@@ -124,26 +125,27 @@ shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padd
 <img id="hgCadPreview" alt="Ảnh tham chiếu CAD" style="display:block;max-width:100%;max-height:440px;object-fit:contain;margin:auto" />
 <p id="hgCadImageMeta" style="font-size:12px;margin:8px 0"></p>
 </div>
-<label>Ghi chú và kích thước đã xác minh<textarea id="hgCadNotes" rows="3" placeholder="Mô tả đối tượng, nguồn kích thước, bộ phận khuất, thông số xác nhận..."></textarea></label>
-<details open style="margin:16px 0"><summary><strong>FURNITURE CAD ENGINE V2.0 — Số hóa đường bao 2D thành DXF</strong></summary>
+<label>Ghi chú bổ sung và kích thước đã xác minh<textarea id="hgCadNotes" rows="3" placeholder="Mô tả đối tượng, nguồn kích thước, bộ phận khuất, thông số xác nhận..."></textarea></label>
+<details open style="margin:16px 0"><summary><strong>BỘ DỰNG BẢN VẼ ĐỒ NỘI THẤT RỜI — Số hóa đường bao thành DXF</strong></summary>
 <p style="font-size:13px">Chọn ảnh JPG/PNG ở trên, bấm lần lượt các điểm trên đường bao sản phẩm. Đặt kích thước chuẩn cho đoạn hiệu chuẩn bằng hai điểm. Công cụ tạo DXF vector 2D thật từ các điểm do người dùng xác nhận; không tự nhận diện ảnh, không suy diễn các hình chiếu khuất.</p>
-<label>Hình chiếu đang số hóa<select id="hgTraceView">${opt([["TOP","TOP — mặt bằng"],["FRONT","FRONT — mặt trước"],["BACK","BACK — mặt sau"],["LEFT","LEFT — mặt trái"],["RIGHT","RIGHT — mặt phải"]])}</select></label>
+<label>Hình chiếu đang số hóa<select id="hgTraceView">${opt([["TOP","Mặt bằng (nhìn từ trên)"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"]])}</select></label>
 <div style="margin:12px 0;position:relative;max-width:850px;overflow:hidden"><canvas id="hgTraceCanvas" style="width:100%;height:auto;max-height:550px;object-fit:contain;touch-action:manipulation;cursor:crosshair;background:#1b2028;border:1px solid #536173;border-radius:8px"></canvas></div>
 <div style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" id="hgTraceCalibrate">Đặt 2 điểm chuẩn</button><button type="button" id="hgTraceUndo">Hoàn tác điểm</button><button type="button" id="hgTraceClear">Xóa đường bao</button></div>
 <label style="display:block;margin:10px 0">Độ dài đoạn chuẩn (mm)<input id="hgTraceMm" type="number" min="0.001" step="any" placeholder="Ví dụ 500"></label>
 <label style="display:flex;align-items:center;gap:8px"><input id="hgTraceClosed" type="checkbox" checked> Khép kín đường bao</label>
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
-<button type="button" id="hgTraceExport">Xuất DXF vector 2D (R12)</button>
-</details><h3>Hình chiếu yêu cầu</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${["TOP","FRONT","BACK","LEFT","RIGHT","SECTION"].map(v=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+v+'</label>').join('')}</div>
+<button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
+</details><h3>Các hình chiếu cần triển khai</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${[["TOP","Mặt bằng"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"],["SECTION","Mặt cắt"]].map(([v,label])=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+label+'</label>').join('')}</div>
 <h3>Hội đồng chuyên gia tham chiếu</h3><p id="hgCadRouting"></p>
-<details><summary>Danh mục đầy đủ 32 chuyên gia / 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
-<h3>Đặc tả kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>
-<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button id="hgCadBuild" type="button">Tạo prompt CAD theo ảnh</button><button id="hgCadCopy" type="button">Sao chép prompt</button><button id="hgCadDownload" type="button">Tải prompt .txt</button><button id="hgCadOpenAI" type="button">Mở ChatGPT để dựng bản vẽ</button></div>
-<p style="font-size:13px">Quy trình: chọn ảnh → xem trước → tạo prompt → sao chép → mở ChatGPT → đính kèm chính ảnh gốc và dán prompt. Website chưa thể tự chuyển tệp ảnh vào cuộc trò chuyện ChatGPT.</p>
+<details><summary>Danh sách 32 chuyên gia tham chiếu thuộc 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
+<h3>Hướng dẫn phân tích và triển khai kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px"><button id="hgCadBuild" type="button">Tạo hướng dẫn dựng CAD từ ảnh</button><button id="hgCadCopy" type="button">Sao chép hướng dẫn</button><button id="hgCadDownload" type="button">Tải hướng dẫn (.txt)</button><button id="hgCadOpenAI" type="button">Mở ChatGPT để phân tích ảnh</button></div>
+<p style="font-size:13px">Quy trình: chọn ảnh → xem trước → tạo hướng dẫn → sao chép → mở ChatGPT → đính kèm chính ảnh gốc và dán hướng dẫn. Website chưa thể tự chuyển tệp ảnh vào cuộc trò chuyện ChatGPT.</p>
 <p id="hgCadMessage" role="status" aria-live="polite" style="font-size:13px;margin-top:10px"></p>
 </section>`);
 const get=id=>document.getElementById(id), val=id=>get(id).value;
-function updateRouting(){const people=routing[val("hgCadObject")];get("hgCadRouting").textContent="Chủ đạo: "+people[0]+" · Hỗ trợ: "+people.slice(1).join(" · ");}
+const modeHelp={cad:"<strong>01 — AI bản vẽ CAD:</strong> Dùng khi cần phân tích mặt bằng, bản vẽ 2D, bố trí không gian, hệ trục, kích thước và các hình chiếu. Kết quả hướng đến hồ sơ CAD có cấu trúc, không phải bản vẽ thi công tự động.",interior:"<strong>02 — AI CAD nội thất:</strong> Dùng để phân tích và tái dựng đồ nội thất rời như sofa, ghế, bàn, giường, tủ, kệ và đôn. Ưu tiên đường bao, hình chiếu, kích thước, đường cong và tính đồng bộ giữa các mặt.",shop:"<strong>03 — AI bản vẽ thi công:</strong> Dùng khi cần rà soát cấu tạo, vật liệu, liên kết, chi tiết lắp ráp và kích thước phục vụ sản xuất, thi công. Phần không nhìn thấy hoặc chưa có dữ liệu phải ghi rõ cần xác nhận; không tự tạo chi tiết."};
+function updateRouting(){get("hgCadModeHelp").innerHTML=modeHelp[val("hgCadMode")];const people=routing[val("hgCadObject")];get("hgCadRouting").textContent="Chủ đạo: "+people[0]+" · Hỗ trợ: "+people.slice(1).join(" · ");}
 function build(){
 const views=[...document.querySelectorAll("[data-hg-view]:checked")].map(x=>x.dataset.hgView);
 const people=routing[val("hgCadObject")];
@@ -170,10 +172,11 @@ const lines=[
 "GIỚI HẠN: Đặc tả văn bản này không phải bản vẽ CAD và không phải tệp DWG/DXF."
 ];
 get("hgCadPrompt").value=lines.join("\n");
-get("hgCadMessage").textContent=size?"Đã tạo đặc tả; cần kiểm chứng kích thước với nguồn.":"Đã tạo đặc tả; chưa có kích thước chuẩn để dựng CAD chính xác.";
+get("hgCadMessage").textContent=size?"Đã tạo hướng dẫn kỹ thuật; cần kiểm chứng kích thước với nguồn.":"Đã tạo hướng dẫn kỹ thuật; chưa có kích thước chuẩn để dựng CAD chính xác.";
 }
 get("hgCadObject").addEventListener("change",()=>{updateRouting();build()});
-["hgCadMode","hgCadSource","hgCadSize","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
+["hgCadSource","hgCadSize","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
+get("hgCadMode").addEventListener("change",()=>{updateRouting();build()});
 document.querySelectorAll("[data-hg-view]").forEach(el=>el.addEventListener("change",build));
 let previewUrl=null;
 get("hgCadFile").addEventListener("change",()=>{
@@ -193,7 +196,7 @@ build();
 get("hgCadBuild").addEventListener("click",build);
 get("hgCadOpenAI").addEventListener("click",async()=>{
 build();
-try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép prompt. Trong ChatGPT hãy đính kèm ảnh gốc rồi dán prompt."; }catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép prompt được chọn, sau đó đính kèm ảnh trong ChatGPT.";}
+try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép hướng dẫn. Trong ChatGPT hãy đính kèm ảnh gốc rồi dán prompt."; }catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép hướng dẫn được chọn, sau đó đính kèm ảnh trong ChatGPT.";}
 window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
 });
 get("hgCadCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép đặc tả."}catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép văn bản đang được chọn."}});

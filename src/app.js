@@ -115,7 +115,16 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <div id="hgCadModeHelp" class="notice" style="margin:10px 0 16px;font-size:13px;line-height:1.6" role="status" aria-live="polite"></div>
 <div style="min-width:0"><label for="hgCadObject">Đối tượng cần triển khai</label><select id="hgCadObject"><optgroup label="Sofa và ghế"><option value="sofa">Sofa thẳng, góc, cong, module</option><option value="chair">Ghế bành, ghế thư giãn, ghế xoay</option><option value="chair">Ghế ăn, ghế làm việc, ghế bar</option><option value="stool">Ghế đôn, ghế dài, ottoman</option></optgroup><optgroup label="Các loại bàn"><option value="table">Bàn trà, bàn phụ, bàn góc</option><option value="table">Bàn ăn, bàn họp, bàn làm việc</option><option value="table">Bàn trang điểm, bàn console</option><option value="complex">Bàn gấp, bàn nâng hạ, bàn biến hình</option></optgroup><optgroup label="Phòng ngủ"><option value="bed">Giường ngủ, giường bọc nệm</option><option value="bed">Giường tầng, giường gấp, giường kéo</option><option value="cabinet">Tủ đầu giường, tủ ngăn kéo</option></optgroup><optgroup label="Tủ và kệ"><option value="cabinet">Tủ quần áo rời, tủ trang trí</option><option value="shelf">Kệ sách, kệ trưng bày, kệ module</option><option value="cabinet">Tủ TV, tủ thấp, tủ rượu, tủ giày</option></optgroup><optgroup label="Khác"><option value="complex">Nội thất có cơ cấu đặc biệt</option><option value="space">Không gian nội thất</option><option value="custom">Khác — Tự nhập tên sản phẩm</option></optgroup></select><div id="hgCadCustomWrap" hidden style="margin-top:10px"><label for="hgCadCustomName">Tên sản phẩm tự nhập</label><input id="hgCadCustomName" type="text" maxlength="120" placeholder="Ví dụ: Ghế massage, bàn bi-a, tủ cigar" autocomplete="off"></div></div>
 <label>Loại nguồn<select id="hgCadSource">${opt([["render","Ảnh diễn họa / Mô hình 3D"],["photo","Ảnh chụp thực tế"],["drawing","Bản vẽ / PDF"],["cad","Tệp bản vẽ CAD"]])}</select></label>
-<label>Kích thước chuẩn (mm)<input id="hgCadSize" placeholder="Dài 900 × Sâu 450 × Cao 800" autocomplete="off"></label>
+<fieldset class="hg-cad-dimensions" style="min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;margin:0">
+<legend style="padding:0 7px;color:var(--gold2);font-weight:650">Kích thước sản phẩm (mm)</legend>
+<div class="hg-cad-dim-grid">
+<label>Dài (mm)<input id="hgCadLength" type="number" inputmode="decimal" min="0" step="any" placeholder="900"></label>
+<label>Rộng / Sâu (mm)<input id="hgCadDepth" type="number" inputmode="decimal" min="0" step="any" placeholder="450"></label>
+<label>Cao (mm)<input id="hgCadHeight" type="number" inputmode="decimal" min="0" step="any" placeholder="800"></label>
+</div>
+<label style="margin-top:6px">Nguồn số đo<select id="hgCadDimSource">${opt([["unconfirmed","Chưa xác nhận"],["confirmed","Đã đo / Có bản vẽ xác nhận"],["manufacturer","Thông số từ nhà sản xuất"],["estimated","Tạm tính / Cần kiểm chứng"]])}</select></label>
+<p style="font-size:12px;margin:6px 0 0">Để trống số đo chưa biết. Không tự suy ra kích thước chính xác từ ảnh phối cảnh.</p>
+</fieldset>
 <label>Quy ước chiếu<select id="hgCadProjection">${opt([["unconfirmed","Chưa xác nhận"],["first","Góc chiếu thứ nhất"],["third","Góc chiếu thứ ba"]])}</select></label>
 <label>Phạm vi<select id="hgCadScope">${opt([["all","Phân tích và dựng lại bản vẽ"],["geometry","Chỉ dựng hình học hai chiều"],["details","Chi tiết có căn cứ"],["audit","Kiểm tra tính thống nhất bản vẽ"]])}</select></label>
 </div>
@@ -183,6 +192,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 @media(max-width:520px){.hg-plan-panel .hg-cad-views{gap:7px!important}.hg-plan-panel .hg-cad-view{padding:7px 9px!important}.hg-plan-panel .hg-cad-view span{font-size:12px!important}}
 
 @media(max-width:699px){.hg-plan-panel details{padding:12px}.hg-plan-panel button{font-size:13px}.hg-plan-panel h3{margin-top:18px}}
+ .hg-cad-dim-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.hg-cad-dim-grid label{min-width:0}.hg-cad-dimensions{grid-column:1/-1}@media(max-width:560px){.hg-cad-dim-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hg-cad-dim-grid label:last-child{grid-column:1/-1}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
@@ -201,12 +211,17 @@ function build(){
 const views=[...document.querySelectorAll("[data-hg-view]:checked")].map(x=>x.dataset.hgView);
 const people=routing[val("hgCadObject")];
 const file=get("hgCadFile").files[0];
-const size=val("hgCadSize").trim(),notes=val("hgCadNotes").trim();
+const dimensions=[["Dài",val("hgCadLength")],["Rộng / Sâu",val("hgCadDepth")],["Cao",val("hgCadHeight")]];
+const validDimensions=dimensions.map(([name,raw])=>[name,raw.trim(),raw.trim()!==""&&Number.isFinite(Number(raw))&&Number(raw)>0]);
+const size=validDimensions.map(([name,raw,ok])=>name+": "+(ok?raw+" mm":"CHƯA XÁC NHẬN")).join(" · ");
+const hasValidDimension=validDimensions.some(item=>item[2]);
+const dimensionSource={unconfirmed:"CHƯA XÁC NHẬN",confirmed:"Đã đo / Có bản vẽ xác nhận",manufacturer:"Thông số từ nhà sản xuất",estimated:"Tạm tính / Cần kiểm chứng"}[val("hgCadDimSource")];
+const notes=val("hgCadNotes").trim();
 const lines=[
 "HOANGGIA INTERIOR CAD AI — ĐẶC TẢ KỸ THUẬT",
 "Chuyên gia: "+val("hgCadMode"),"Đối tượng: "+(val("hgCadObject")==="custom"?(val("hgCadCustomName").trim()||"CHƯA NHẬP TÊN SẢN PHẨM"):get("hgCadObject").selectedOptions[0].text),
 "Nguồn: "+val("hgCadSource"),"Tệp nguồn: "+(file?file.name:"CHƯA CUNG CẤP"),
-"Kích thước: "+(size||"CẦN XÁC NHẬN"),"Đơn vị: mm",
+"Kích thước: "+size,"Nguồn kích thước: "+dimensionSource,"Đơn vị: mm",
 "Quy ước chiếu: "+val("hgCadProjection"),"Phạm vi: "+val("hgCadScope"),
 "Hình chiếu: "+(views.join(", ")||"CHƯA CHỌN"),
 "Chuyên gia tham chiếu chủ đạo: "+people[0],
@@ -223,10 +238,10 @@ const lines=[
 "GIỚI HẠN: Đặc tả văn bản này không phải bản vẽ CAD và không phải tệp DWG/DXF."
 ];
 get("hgCadPrompt").value=lines.join("\n");
-get("hgCadMessage").textContent=size?"Đã tạo hướng dẫn kỹ thuật; cần kiểm chứng kích thước với nguồn.":"Đã tạo hướng dẫn kỹ thuật; chưa có kích thước chuẩn để dựng CAD chính xác.";
+get("hgCadMessage").textContent=hasValidDimension?"Đã tạo hướng dẫn kỹ thuật; kiểm tra nguồn và các kích thước còn thiếu.":"Đã tạo hướng dẫn kỹ thuật; chưa có kích thước chuẩn để dựng CAD chính xác.";
 }
 get("hgCadObject").addEventListener("change",()=>{get("hgCadCustomWrap").hidden=val("hgCadObject")!=="custom";updateRouting();build()});get("hgCadCustomName").addEventListener("input",build);
-["hgCadSource","hgCadSize","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
+["hgCadSource","hgCadLength","hgCadDepth","hgCadHeight","hgCadDimSource","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
 get("hgCadMode").addEventListener("change",()=>{updateRouting();build()});
 document.querySelectorAll("[data-hg-view]").forEach(el=>el.addEventListener("change",build));
 let previewUrl=null;

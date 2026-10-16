@@ -59,7 +59,7 @@ async function loadMaterialIndex(){if(materialIndex)return materialIndex;if(mate
 const VIETNAM_MATERIAL_SOURCES=[
 ["Gỗ công nghiệp, laminate","An Cường","https://ancuong.com/"],
 ["Đá thạch anh nhân tạo","Vicostone","https://vicostone.com/"],
-["Gạch ốp lát","Viglacera","https://viglacera.com.vn/"],
+["Gạch ốp lát","Khatra Gallery","https://khatra.client-gallery.com/"],
 ["Sơn và bảng màu","Jotun Việt Nam","https://www.jotun.com/vn-vi/decorative/colours"],
 ["Kính xây dựng","Viglacera Glass","https://viglacera.com.vn/"],
 ["Kim loại, nhôm định hình","Tung Kuang","https://tungkuang.com.vn/"],

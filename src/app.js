@@ -151,6 +151,18 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <label style="display:flex;align-items:center;gap:8px"><input id="hgTraceClosed" type="checkbox" checked> Khép kín đường bao</label>
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
 <button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
+<div class="hg-cad-autovector" style="margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)">
+<strong>Thử nghiệm — Tách nét tự động từ bản vẽ kỹ thuật</strong>
+<p style="font-size:12px;line-height:1.6;margin:8px 0">Dành cho ảnh bản vẽ trắng đen nhiều hình chiếu như HJ 600 A. Công cụ dò các nét ngang và dọc dài trên ảnh rồi xuất LINE theo tỷ lệ hiệu chuẩn. Đây là vector hóa ảnh có kiểm soát, <b>không phải AI hiểu cấu tạo</b>; chữ, nét cong, kích thước và phần khuất chưa được tái dựng đầy đủ.</p>
+<div class="hg-cad-autogrid">
+<label>Chiều rộng thực của vùng ảnh được chọn (mm)<input id="hgAutoWidth" type="number" min="1" step="any" placeholder="Ví dụ: 1500 — chỉ khi ảnh cắt đúng chiều rộng sản phẩm"></label>
+<label>Ngưỡng nhận nét tối (0–255)<input id="hgAutoThreshold" type="number" min="30" max="220" step="1" value="130"></label>
+<label>Chiều dài nét tối thiểu (pixel)<input id="hgAutoMinRun" type="number" min="6" max="500" step="1" value="24"></label>
+</div>
+<p style="font-size:12px">Nếu ảnh gồm cả khung tên, chữ và nhiều hình chiếu, hãy cắt riêng từng hình chiếu trước khi tải lên. Không nhập 1500 mm cho toàn bộ tờ bản vẽ HJ 600 A.</p>
+<button type="button" id="hgAutoExport">Tách nét thẳng và xuất DXF thử nghiệm</button>
+<p id="hgAutoStatus" role="status" aria-live="polite" style="font-size:12px;margin:8px 0 0"></p>
+</div>
 <div class="hg-cad-export-panel" style="margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)">
 <strong>Xuất tệp dùng trong AutoCAD — phân biệt bản nguyên lý và bản số hóa</strong>
 <p style="font-size:12px;margin:8px 0">Tệp DXF là định dạng vector có thể mở trong AutoCAD và lưu lại thành DWG. Xuất DXF theo hình chiếu cần số hóa đường nét trước. Ảnh bản vẽ không tự chuyển thành CAD đầy đủ.</p>
@@ -213,6 +225,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 .hg-plan-panel .hg-cad-setting{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:12px}.hg-plan-panel .hg-cad-help{font-size:12px;line-height:1.55;color:var(--muted);margin:9px 0 0;min-height:54px}@media(max-width:650px){.hg-plan-panel .hg-cad-help{min-height:0}}
 .hg-cad-export-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.hg-cad-export-grid>div{min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px}@media(max-width:740px){.hg-cad-export-grid{grid-template-columns:1fr}}
 .hg-cad-reference-sheet{margin:16px 0;padding:clamp(12px,2vw,20px);border:1px solid var(--line);border-radius:14px;background:var(--panel2);min-width:0}.hg-cad-sheet-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:start;margin-bottom:14px}.hg-cad-sheet-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px}.hg-cad-sheet-source,.hg-cad-sheet-info,.hg-cad-sheet-views{border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}.hg-cad-sheet-source img{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;margin-top:10px}.hg-cad-sheet-source img[hidden]{display:none}.hg-cad-sheet-info p{font-size:13px;line-height:1.5;overflow-wrap:anywhere}.hg-cad-sheet-views{margin-top:12px}.hg-cad-sheet-views #hgCadSheetViews{font-size:12px;line-height:1.6;color:var(--muted);margin-top:8px}@media(max-width:680px){.hg-cad-sheet-grid{grid-template-columns:minmax(0,1fr)}}
+.hg-cad-autogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.hg-cad-autogrid label{font-size:12px}@media(max-width:700px){.hg-cad-autogrid{grid-template-columns:1fr}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
@@ -333,6 +346,25 @@ get("hgTraceCalibrate").addEventListener("click",()=>{traceCal=[];traceCalMode=t
 get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();});
 get("hgTraceClear").addEventListener("click",()=>{tracePoints=[];traceDraw();traceStatus("Đã xóa đường bao, giữ nguyên điểm hiệu chuẩn.");});
 get("hgTraceClosed").addEventListener("change",traceDraw);
+get("hgAutoExport").addEventListener("click",()=>{
+const status=get("hgAutoStatus"),widthMM=Number(val("hgAutoWidth")),threshold=Number(val("hgAutoThreshold")),minRun=Number(val("hgAutoMinRun"));
+if(!traceImage){status.textContent="Cần tải ảnh bản vẽ JPG/PNG trước.";return;}
+if(!(widthMM>0&&Number.isFinite(widthMM))){status.textContent="Nhập chiều rộng thực của đúng vùng ảnh đã cắt, đơn vị mm.";return;}
+if(!(threshold>=30&&threshold<=220&&minRun>=6)){status.textContent="Ngưỡng hoặc độ dài nét không hợp lệ.";return;}
+const w=Math.min(1400,traceImage.naturalWidth),h=Math.round(traceImage.naturalHeight*w/traceImage.naturalWidth);
+if(h>2000||w*h>2000000){status.textContent="Ảnh quá lớn; hãy cắt riêng một hình chiếu trước khi xử lý.";return;}
+const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);ctx.drawImage(traceImage,0,0,w,h);
+const pix=ctx.getImageData(0,0,w,h).data;const dark=(x,y)=>{const i=(y*w+x)*4;return (.2126*pix[i]+.7152*pix[i+1]+.0722*pix[i+2])<threshold;};
+const segments=[],step=2,maxSegments=15000;
+for(let y=0;y<h;y+=step){let x=0;while(x<w){if(!dark(x,y)){x++;continue;}let x0=x;while(x<w&&dark(x,y))x++;if(x-x0>=minRun)segments.push([x0,y,x-1,y]);if(segments.length>maxSegments)break;}if(segments.length>maxSegments)break;}
+if(segments.length<=maxSegments){for(let x=0;x<w;x+=step){let y=0;while(y<h){if(!dark(x,y)){y++;continue;}let y0=y;while(y<h&&dark(x,y))y++;if(y-y0>=minRun)segments.push([x,y0,x,y-1]);if(segments.length>maxSegments)break;}if(segments.length>maxSegments)break;}}
+if(segments.length>maxSegments){status.textContent="Quá nhiều nét phát hiện; hãy cắt ảnh gọn hơn hoặc tăng chiều dài nét tối thiểu.";return;}
+if(!segments.length){status.textContent="Không phát hiện nét thẳng đủ dài. Thử giảm chiều dài tối thiểu hoặc điều chỉnh ngưỡng.";return;}
+const scale=widthMM/w,arr=[],add=(k,v)=>arr.push(String(k),String(v));add(0,"SECTION");add(2,"HEADER");add(9,"$ACADVER");add(1,"AC1009");add(9,"$INSUNITS");add(70,4);add(0,"ENDSEC");add(0,"SECTION");add(2,"TABLES");add(0,"TABLE");add(2,"LAYER");add(70,1);add(0,"LAYER");add(2,"HG-RASTER-UNVERIFIED");add(70,0);add(62,8);add(6,"CONTINUOUS");add(0,"ENDTAB");add(0,"ENDSEC");add(0,"SECTION");add(2,"ENTITIES");
+for(const [x1,y1,x2,y2] of segments){add(0,"LINE");add(8,"HG-RASTER-UNVERIFIED");add(10,(x1*scale).toFixed(4));add(20,((h-y1)*scale).toFixed(4));add(30,0);add(11,(x2*scale).toFixed(4));add(21,((h-y2)*scale).toFixed(4));add(31,0);}
+add(0,"ENDSEC");add(0,"EOF");const blob=new Blob([arr.join("\n")+"\n"],{type:"application/dxf"}),url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="HOANGGIA-TACH-NET-ANH-CHUA-XAC-MINH.dxf";link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+status.textContent="Đã xuất "+segments.length+" đoạn LINE từ ảnh; tỷ lệ "+scale.toFixed(5)+" mm/pixel. Cần kiểm tra, xóa nét trùng/nhiễu và hiệu chuẩn lại trong AutoCAD. Không dùng trực tiếp để thi công.";
+});
 get("hgCadLayoutExport").addEventListener("click",()=>{
 const status=get("hgCadExportStatus"),L=Number(val("hgCadLength")),W=Number(val("hgCadDepth")),H=Number(val("hgCadHeight"));
 if(![L,W,H].every(n=>Number.isFinite(n)&&n>0)){status.textContent="Cần nhập đủ 3 kích thước dương (dài, rộng/sâu, cao) trước khi tạo DXF bố cục.";return;}

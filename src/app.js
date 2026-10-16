@@ -106,7 +106,7 @@ const expertGroups=[
 ];
 const routing={bed:["Piero Lissoni","Patricia Urquiola","Henry Dreyfuss","James Krenov"],stool:["Hans J. Wegner","Naoto Fukasawa","Niels Diffrient","Michael Thonet"],shelf:["Dieter Rams","Piero Lissoni","James Krenov","Gerrit Rietveld"],sofa:["Antonio Citterio","Patricia Urquiola","Niels Diffrient","Charles Eames"],chair:["Hans J. Wegner","Henry Dreyfuss","Niels Diffrient","Konstantin Grcic"],cabinet:["Dieter Rams","Piero Lissoni","James Krenov","John Pawson"],table:["Jean-Marie Massaud","Naoto Fukasawa","Gerrit Rietveld","Konstantin Grcic"],space:["Vincent Van Duysen","John Pawson","Peter Zumthor","Tadao Ando"],complex:["David Rutten","Arturo Tedeschi","Robert Aish","Achim Menges"]};
 const opt=(a)=>a.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('');
-shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padding:24px">
+shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:20px auto;padding:24px">
 <span class="eyebrow">HOANGGIA AI / ĐIỀU PHỐI CHUYÊN GIA BẢN VẼ</span>
 <h2>Bản vẽ & mặt bằng</h2><p>Phân tích nguồn, xác minh hình học và tạo đặc tả triển khai CAD nội thất. Hội đồng 32 chuyên gia tham chiếu thuộc 8 nhóm chuyên môn.</p>
 <div class="notice">Công cụ hỗ trợ thiết lập nhiệm vụ, xem ảnh, tạo hướng dẫn phân tích và số hóa thủ công đường bao 2D để xuất DXF. Chưa tự động phân tích hình học từ ảnh hoặc xuất bản vẽ DWG hoàn chỉnh.</div>
@@ -136,11 +136,26 @@ shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padd
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
 <button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
 </details><style>
-.hg-cad-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}
-.hg-cad-view{display:flex!important;align-items:center!important;justify-content:flex-start;gap:9px;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #485365;border-radius:10px;background:rgba(255,255,255,.035);cursor:pointer;box-sizing:border-box;overflow:visible}
-.hg-cad-view input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;flex:0 0 18px!important;width:18px!important;height:18px!important;min-width:18px!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;accent-color:#4399f6}
-.hg-cad-view span{display:block;flex:1;min-width:0;white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.3;font-size:13px}
-@media(min-width:720px){.hg-cad-views{grid-template-columns:repeat(3,minmax(0,1fr))}.hg-cad-view span{font-size:14px}}
+.hg-plan-panel,.hg-plan-panel *{box-sizing:border-box}
+.hg-plan-panel{width:min(100% - 24px,1160px);max-width:1160px!important;margin:20px auto!important;padding:clamp(14px,2.4vw,28px)!important;min-width:0;overflow-x:clip}
+.hg-plan-panel label,.hg-plan-panel p,.hg-plan-panel details,.hg-plan-panel textarea{min-width:0;overflow-wrap:break-word}
+.hg-plan-panel input:not([type="checkbox"]):not([type="file"]),.hg-plan-panel select,.hg-plan-panel textarea{width:100%;max-width:100%;min-width:0}
+.hg-plan-panel input[type="file"]{max-width:100%;width:100%;font-size:13px}
+.hg-plan-panel button{max-width:100%;white-space:normal;line-height:1.3;min-height:42px}
+.hg-plan-panel details{max-width:100%}
+.hg-plan-panel summary{cursor:pointer;line-height:1.45}
+.hg-plan-panel #hgTraceCanvas{display:block;max-width:100%;height:auto}
+.hg-plan-panel #hgCadPrompt{overflow:auto}
+.hg-cad-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px;min-width:0}
+.hg-cad-view{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #485365;border-radius:10px;background:rgba(255,255,255,.035);cursor:pointer;box-sizing:border-box;overflow:hidden}
+.hg-cad-view input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;display:block!important;flex:0 0 18px!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;accent-color:#4399f6}
+.hg-cad-view span{display:block!important;flex:1 1 auto!important;min-width:0!important;width:auto!important;white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;writing-mode:horizontal-tb!important;line-height:1.35;font-size:clamp(12px,1.5vw,14px)}
+.hg-cad-view:focus-within{outline:2px solid #4399f6;outline-offset:2px}
+@media(min-width:700px){.hg-cad-views{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1100px){.hg-cad-views{grid-template-columns:repeat(6,minmax(0,1fr))}.hg-cad-view{padding:10px 9px;gap:7px!important}}
+@media(max-width:390px){.hg-plan-panel{width:calc(100% - 12px);padding:12px!important}.hg-cad-views{gap:7px}.hg-cad-view{padding:8px;gap:6px!important}.hg-cad-view span{font-size:12px}}
+@media(hover:hover){.hg-cad-view:hover{border-color:#79aaf0;background:rgba(67,153,246,.08)}}
+@media(prefers-reduced-motion:reduce){.hg-plan-panel *{scroll-behavior:auto!important;transition:none!important}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>

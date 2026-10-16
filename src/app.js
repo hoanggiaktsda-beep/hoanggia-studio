@@ -147,15 +147,35 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 .hg-plan-panel #hgTraceCanvas{display:block;max-width:100%;height:auto}
 .hg-plan-panel #hgCadPrompt{overflow:auto}
 .hg-cad-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px;min-width:0}
-.hg-cad-view{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #485365;border-radius:10px;background:rgba(255,255,255,.035);cursor:pointer;box-sizing:border-box;overflow:hidden}
-.hg-cad-view input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;display:block!important;flex:0 0 18px!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;accent-color:#4399f6}
+.hg-cad-view{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;min-width:0;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.035);cursor:pointer;box-sizing:border-box;overflow:hidden}
+.hg-cad-view input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;display:block!important;flex:0 0 18px!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;accent-color:var(--gold)}
 .hg-cad-view span{display:block!important;flex:1 1 auto!important;min-width:0!important;width:auto!important;white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important;writing-mode:horizontal-tb!important;line-height:1.35;font-size:clamp(12px,1.5vw,14px)}
-.hg-cad-view:focus-within{outline:2px solid #4399f6;outline-offset:2px}
+.hg-cad-view:focus-within{outline:2px solid var(--gold);outline-offset:2px}
 @media(min-width:700px){.hg-cad-views{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:1100px){.hg-cad-views{grid-template-columns:repeat(6,minmax(0,1fr))}.hg-cad-view{padding:10px 9px;gap:7px!important}}
 @media(max-width:390px){.hg-plan-panel{width:calc(100% - 12px);padding:12px!important}.hg-cad-views{gap:7px}.hg-cad-view{padding:8px;gap:6px!important}.hg-cad-view span{font-size:12px}}
-@media(hover:hover){.hg-cad-view:hover{border-color:#79aaf0;background:rgba(67,153,246,.08)}}
+@media(hover:hover){.hg-cad-view:hover{border-color:var(--gold2);background:rgba(210,175,115,.08)}}
 @media(prefers-reduced-motion:reduce){.hg-plan-panel *{scroll-behavior:auto!important;transition:none!important}}
+
+.hg-plan-panel{background:linear-gradient(150deg,rgba(210,175,115,.035),transparent 45%),var(--panel)!important;border:1px solid var(--line)!important;border-radius:var(--radius)!important;box-shadow:0 14px 44px rgba(0,0,0,.16)}
+.hg-plan-panel h2{font-size:clamp(23px,3vw,31px);letter-spacing:-.045em;margin-bottom:10px}
+.hg-plan-panel h3{font-size:clamp(15px,1.8vw,18px);color:var(--text);margin:22px 0 10px}
+.hg-plan-panel .eyebrow{color:var(--gold);letter-spacing:.13em}
+.hg-plan-panel .notice{background:var(--panel2);border:1px solid var(--line);border-left:2px solid var(--gold);border-radius:10px;color:var(--muted);padding:12px 14px}
+.hg-plan-panel input:not([type="checkbox"]),.hg-plan-panel select,.hg-plan-panel textarea{background:#0d120f;border-color:#39463b;color:var(--text);border-radius:10px}
+.hg-plan-panel input:focus-visible,.hg-plan-panel select:focus-visible,.hg-plan-panel textarea:focus-visible,.hg-plan-panel button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.hg-plan-panel button{border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 16px;transition:background .15s,border-color .15s}
+.hg-plan-panel button:hover{border-color:var(--gold);background:rgba(210,175,115,.12)}
+.hg-plan-panel #hgTraceExport,.hg-plan-panel #hgCadBuild{background:var(--gold);color:#191a14;border-color:var(--gold);font-weight:700}
+.hg-plan-panel #hgTraceExport:hover,.hg-plan-panel #hgCadBuild:hover{background:var(--gold2)}
+.hg-plan-panel details{background:rgba(0,0,0,.1);border:1px solid var(--line);border-radius:12px;padding:clamp(12px,2vw,18px)}
+.hg-plan-panel details summary{color:var(--gold2);font-weight:650}
+.hg-plan-panel .hg-cad-view{background:var(--panel2);border-color:var(--line)}
+.hg-plan-panel .hg-cad-view:hover{border-color:var(--gold)}
+.hg-plan-panel .hg-cad-view input[type="checkbox"]{accent-color:var(--gold)}
+.hg-plan-panel #hgTraceCanvas{border-color:var(--line)!important;background:var(--bg)!important;border-radius:12px!important}
+.hg-plan-panel #hgCadPreviewWrap{border-color:var(--line)!important;background:var(--panel2);border-radius:12px}
+@media(max-width:699px){.hg-plan-panel details{padding:12px}.hg-plan-panel button{font-size:13px}.hg-plan-panel h3{margin-top:18px}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>

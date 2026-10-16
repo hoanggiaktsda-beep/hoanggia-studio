@@ -125,7 +125,16 @@ shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padd
 <p id="hgCadImageMeta" style="font-size:12px;margin:8px 0"></p>
 </div>
 <label>Ghi chú và kích thước đã xác minh<textarea id="hgCadNotes" rows="3" placeholder="Mô tả đối tượng, nguồn kích thước, bộ phận khuất, thông số xác nhận..."></textarea></label>
-<h3>Hình chiếu yêu cầu</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${["TOP","FRONT","BACK","LEFT","RIGHT","SECTION"].map(v=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+v+'</label>').join('')}</div>
+<details open style="margin:16px 0"><summary><strong>FURNITURE CAD ENGINE V2.0 — Số hóa đường bao 2D thành DXF</strong></summary>
+<p style="font-size:13px">Chọn ảnh JPG/PNG ở trên, bấm lần lượt các điểm trên đường bao sản phẩm. Đặt kích thước chuẩn cho đoạn hiệu chuẩn bằng hai điểm. Công cụ tạo DXF vector 2D thật từ các điểm do người dùng xác nhận; không tự nhận diện ảnh, không suy diễn các hình chiếu khuất.</p>
+<label>Hình chiếu đang số hóa<select id="hgTraceView">${opt([["TOP","TOP — mặt bằng"],["FRONT","FRONT — mặt trước"],["BACK","BACK — mặt sau"],["LEFT","LEFT — mặt trái"],["RIGHT","RIGHT — mặt phải"]])}</select></label>
+<div style="margin:12px 0;position:relative;max-width:850px;overflow:hidden"><canvas id="hgTraceCanvas" style="width:100%;height:auto;max-height:550px;object-fit:contain;touch-action:manipulation;cursor:crosshair;background:#1b2028;border:1px solid #536173;border-radius:8px"></canvas></div>
+<div style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" id="hgTraceCalibrate">Đặt 2 điểm chuẩn</button><button type="button" id="hgTraceUndo">Hoàn tác điểm</button><button type="button" id="hgTraceClear">Xóa đường bao</button></div>
+<label style="display:block;margin:10px 0">Độ dài đoạn chuẩn (mm)<input id="hgTraceMm" type="number" min="0.001" step="any" placeholder="Ví dụ 500"></label>
+<label style="display:flex;align-items:center;gap:8px"><input id="hgTraceClosed" type="checkbox" checked> Khép kín đường bao</label>
+<p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
+<button type="button" id="hgTraceExport">Xuất DXF vector 2D (R12)</button>
+</details><h3>Hình chiếu yêu cầu</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${["TOP","FRONT","BACK","LEFT","RIGHT","SECTION"].map(v=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+v+'</label>').join('')}</div>
 <h3>Hội đồng chuyên gia tham chiếu</h3><p id="hgCadRouting"></p>
 <details><summary>Danh mục đầy đủ 32 chuyên gia / 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
 <h3>Đặc tả kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>
@@ -189,6 +198,48 @@ window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
 });
 get("hgCadCopy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(get("hgCadPrompt").value);get("hgCadMessage").textContent="Đã sao chép đặc tả."}catch(e){get("hgCadPrompt").select();get("hgCadMessage").textContent="Hãy sao chép văn bản đang được chọn."}});
 get("hgCadDownload").addEventListener("click",()=>{const blob=new Blob([get("hgCadPrompt").value],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="HOANGGIA-INTERIOR-CAD-SPEC.txt";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});
+// Furniture CAD V2: manually verified, calibrated 2D polyline DXF.
+const traceCanvas=get("hgTraceCanvas"),traceCtx=traceCanvas.getContext("2d");
+let traceImage=null,tracePoints=[],traceCal=[],traceCalMode=false;
+function traceStatus(msg){get("hgTraceStatus").textContent=msg;}
+function traceDraw(){
+if(!traceCtx)return;
+const w=traceCanvas.width,h=traceCanvas.height;traceCtx.clearRect(0,0,w,h);
+if(traceImage)traceCtx.drawImage(traceImage,0,0,w,h);
+traceCtx.lineWidth=Math.max(2,w/450);traceCtx.strokeStyle="#00e0bd";traceCtx.fillStyle="#00e0bd";
+if(tracePoints.length){traceCtx.beginPath();tracePoints.forEach((p,i)=>i?traceCtx.lineTo(p[0],p[1]):traceCtx.moveTo(p[0],p[1]));if(get("hgTraceClosed").checked&&tracePoints.length>2)traceCtx.closePath();traceCtx.stroke();tracePoints.forEach(p=>{traceCtx.beginPath();traceCtx.arc(p[0],p[1],Math.max(3,w/180),0,Math.PI*2);traceCtx.fill()});}
+traceCtx.fillStyle="#ffbd57";traceCal.forEach(p=>{traceCtx.beginPath();traceCtx.arc(p[0],p[1],Math.max(5,w/140),0,Math.PI*2);traceCtx.fill()});
+if(traceCal.length===2){traceCtx.strokeStyle="#ffbd57";traceCtx.beginPath();traceCtx.moveTo(...traceCal[0]);traceCtx.lineTo(...traceCal[1]);traceCtx.stroke();}
+}
+function traceLoad(){
+const f=get("hgCadFile").files[0];tracePoints=[];traceCal=[];traceImage=null;
+if(!f||!f.type.startsWith("image/")){traceCanvas.width=800;traceCanvas.height=400;traceDraw();traceStatus("Chọn ảnh JPG/PNG để bắt đầu số hóa đường bao.");return;}
+const url=URL.createObjectURL(f),im=new Image();
+im.onload=()=>{traceImage=im;const scale=Math.min(1,1200/im.naturalWidth,900/im.naturalHeight);traceCanvas.width=Math.max(1,Math.round(im.naturalWidth*scale));traceCanvas.height=Math.max(1,Math.round(im.naturalHeight*scale));traceDraw();traceStatus("Ảnh đã tải. Bấm Đặt 2 điểm chuẩn, chọn hai điểm có khoảng cách thực đã biết, sau đó bấm các điểm đường bao.");URL.revokeObjectURL(url);};
+im.onerror=()=>{traceStatus("Không thể đọc ảnh.");URL.revokeObjectURL(url);};im.src=url;
+}
+get("hgCadFile").addEventListener("change",traceLoad);
+traceCanvas.addEventListener("click",e=>{if(!traceImage)return;const rect=traceCanvas.getBoundingClientRect(),x=(e.clientX-rect.left)*traceCanvas.width/rect.width,y=(e.clientY-rect.top)*traceCanvas.height/rect.height;if(traceCalMode){if(traceCal.length===2)traceCal=[];traceCal.push([x,y]);if(traceCal.length===2)traceCalMode=false;}else tracePoints.push([x,y]);traceDraw();traceStatus("Điểm đường bao: "+tracePoints.length+" · Điểm chuẩn: "+traceCal.length+"/2");});
+get("hgTraceCalibrate").addEventListener("click",()=>{traceCal=[];traceCalMode=true;traceDraw();traceStatus("Chọn chính xác hai điểm trên ảnh có khoảng cách thực đã biết.");});
+get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();});
+get("hgTraceClear").addEventListener("click",()=>{tracePoints=[];traceDraw();traceStatus("Đã xóa đường bao, giữ nguyên điểm hiệu chuẩn.");});
+get("hgTraceClosed").addEventListener("change",traceDraw);
+get("hgTraceExport").addEventListener("click",()=>{
+const mm=Number(val("hgTraceMm"));
+if(!traceImage||tracePoints.length<2||traceCal.length!==2||!Number.isFinite(mm)||mm<=0){traceStatus("Chưa đủ điều kiện: cần ảnh, ít nhất 2 điểm đường bao, 2 điểm chuẩn và chiều dài chuẩn mm > 0.");return;}
+const dist=Math.hypot(traceCal[1][0]-traceCal[0][0],traceCal[1][1]-traceCal[0][1]);if(dist<1){traceStatus("Hai điểm chuẩn trùng nhau, vui lòng chọn lại.");return;}
+const scale=mm/dist,closed=get("hgTraceClosed").checked&&tracePoints.length>2;
+const layer="HG-"+val("hgTraceView");
+const pairs=[];const add=(k,v)=>{pairs.push(String(k),String(v))};
+add(0,"SECTION");add(2,"HEADER");add(9,"$INSUNITS");add(70,4);add(0,"ENDSEC");
+add(0,"SECTION");add(2,"TABLES");add(0,"TABLE");add(2,"LAYER");add(70,1);add(0,"LAYER");add(2,layer);add(70,0);add(62,7);add(6,"CONTINUOUS");add(0,"ENDTAB");add(0,"ENDSEC");
+add(0,"SECTION");add(2,"ENTITIES");add(0,"POLYLINE");add(8,layer);add(66,1);add(70,closed?1:0);add(10,0);add(20,0);add(30,0);
+for(const p of tracePoints){add(0,"VERTEX");add(8,layer);add(10,((p[0]-traceCal[0][0])*scale).toFixed(5));add(20,((traceCal[0][1]-p[1])*scale).toFixed(5));add(30,0);}
+add(0,"SEQEND");add(8,layer);add(0,"ENDSEC");add(0,"EOF");
+const content=pairs.join("\n")+"\n",blob=new Blob([content],{type:"application/dxf"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="HOANGGIA-"+val("hgTraceView")+"-TRACE.dxf";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+traceStatus("Đã tạo DXF 2D: "+tracePoints.length+" đỉnh, tỷ lệ "+scale.toFixed(4)+" mm/pixel. Đây là đường bao số hóa thủ công theo ảnh, chưa phải hồ sơ sản xuất hay hình chiếu CAD đầy đủ.");
+});
+traceLoad();
 updateRouting();build();
 }
 function renderBOQ(head){let rows=project().data.boq||[{name:"",unit:"m²",qty:"",price:""}],settings=project().data.boqSettings||{},summary=boq(rows);const trs=rows.map((r,i)=>'<tr><td><input data-i="'+i+'" data-k="name" aria-label="Hạng mục '+(i+1)+'" value="'+esc(r.name||"")+'"></td><td><input data-i="'+i+'" data-k="unit" aria-label="Đơn vị '+(i+1)+'" value="'+esc(r.unit||"")+'"></td><td><input data-i="'+i+'" data-k="qty" type="number" min="0" aria-label="Khối lượng '+(i+1)+'" value="'+esc(r.qty??"")+'"></td><td><input data-i="'+i+'" data-k="price" type="number" min="0" aria-label="Đơn giá '+(i+1)+'" value="'+esc(r.price??"")+'"></td><td class="num">'+formatVnd((Number(r.qty)||0)*(Number(r.price)||0))+'</td><td><button class="btn btn-small btn-danger" data-remove-row="'+i+'" aria-label="Xóa dòng '+(i+1)+'">×</button></td></tr>').join("");

@@ -135,7 +135,16 @@ shell(head+`<section class="panel" style="max-width:1100px;margin:20px auto;padd
 <label style="display:flex;align-items:center;gap:8px"><input id="hgTraceClosed" type="checkbox" checked> Khép kín đường bao</label>
 <p id="hgTraceStatus" role="status" aria-live="polite" style="font-size:13px">Chưa có ảnh. Cần ảnh nguồn và hai điểm hiệu chuẩn.</p>
 <button type="button" id="hgTraceExport">Xuất bản vẽ DXF hai chiều (R12)</button>
-</details><h3>Các hình chiếu cần triển khai</h3><div style="display:flex;flex-wrap:wrap;gap:14px;margin:12px 0">${[["TOP","Mặt bằng"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"],["SECTION","Mặt cắt"]].map(([v,label])=>'<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-hg-view="'+v+'" checked>'+label+'</label>').join('')}</div>
+</details><style>
+.hg-cad-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}
+.hg-cad-view{display:flex!important;align-items:center!important;justify-content:flex-start;gap:9px;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #485365;border-radius:10px;background:rgba(255,255,255,.035);cursor:pointer;box-sizing:border-box;overflow:visible}
+.hg-cad-view input[type="checkbox"]{appearance:auto!important;-webkit-appearance:checkbox!important;flex:0 0 18px!important;width:18px!important;height:18px!important;min-width:18px!important;margin:0!important;padding:0!important;position:static!important;transform:none!important;accent-color:#4399f6}
+.hg-cad-view span{display:block;flex:1;min-width:0;white-space:normal;overflow-wrap:normal;word-break:normal;line-height:1.3;font-size:13px}
+@media(min-width:720px){.hg-cad-views{grid-template-columns:repeat(3,minmax(0,1fr))}.hg-cad-view span{font-size:14px}}
+</style>
+<h3>Các hình chiếu cần triển khai</h3>
+<p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
+<div class="hg-cad-views">${[["TOP","Mặt bằng"],["FRONT","Mặt đứng trước"],["BACK","Mặt đứng sau"],["LEFT","Mặt đứng trái"],["RIGHT","Mặt đứng phải"],["SECTION","Mặt cắt"]].map(([v,label])=>'<label class="hg-cad-view"><input type="checkbox" data-hg-view="'+v+'" checked><span>'+label+'</span></label>').join('')}</div>
 <h3>Hội đồng chuyên gia tham chiếu</h3><p id="hgCadRouting"></p>
 <details><summary>Danh sách 32 chuyên gia tham chiếu thuộc 8 nhóm</summary><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;padding:12px 0">${expertGroups.map(g=>'<div class="panel" style="padding:12px"><strong>'+g[0]+'</strong><p style="font-size:13px">'+g.slice(1).join(' · ')+'</p></div>').join('')}</div></details>
 <h3>Hướng dẫn phân tích và triển khai kỹ thuật</h3><textarea id="hgCadPrompt" rows="13" readonly style="width:100%;font-family:monospace;font-size:12px"></textarea>

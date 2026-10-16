@@ -36,7 +36,18 @@ const MATERIAL_SPECS=[
 {terms:["brushed","brass"],query:"brushed brass metal"},
 {terms:["saddle","leather"],query:"saddle leather"},
 {terms:["linen"],query:"linen fabric"},
-{terms:["smoked","glass"],query:"smoked glass"}
+{terms:["smoked","glass"],query:"smoked glass"},
+{terms:["leather","hide"],query:"leather hide"},
+{terms:["pu","leather"],query:"pu leather"},
+{terms:["microfiber","leather"],query:"microfiber leather"},
+{terms:["tempered","glass"],query:"tempered glass"},
+{terms:["fluted","glass"],query:"fluted glass"},
+{terms:["reflective","glass"],query:"reflective glass"},
+{terms:["smart","glass"],query:"smart glass"},
+{terms:["brushed","stainless","steel"],query:"brushed stainless steel"},
+{terms:["champagne","metal"],query:"champagne metal"},
+{terms:["anodized","aluminium"],query:"anodized aluminium"},
+{terms:["powder","coated","steel"],query:"powder coated steel"}
 ];
 // Lightweight CSS 3D samples: no image binaries, no generic room photography.
 function materialSample(box,i){if(!box)return;box.classList.add("material-sample","material-sample-"+i);box.replaceChildren();const stage=document.createElement("div");stage.className="material-stage";const tile=document.createElement("div");tile.className="material-tile";stage.append(tile);box.append(stage);const label=document.createElement("span");label.className="material-preview-note";label.textContent="Mô phỏng 3D · Màu/vân tham khảo";box.append(label);}

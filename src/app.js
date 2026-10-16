@@ -175,6 +175,13 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 .hg-plan-panel .hg-cad-view input[type="checkbox"]{accent-color:var(--gold)}
 .hg-plan-panel #hgTraceCanvas{border-color:var(--line)!important;background:var(--bg)!important;border-radius:12px!important}
 .hg-plan-panel #hgCadPreviewWrap{border-color:var(--line)!important;background:var(--panel2);border-radius:12px}
+/* Compact checkbox rows: prevent global form and label rules from inflating controls. */
+.hg-plan-panel .hg-cad-views{display:flex!important;flex-wrap:wrap!important;align-items:center;gap:8px 16px!important;margin:8px 0 16px!important}
+.hg-plan-panel .hg-cad-view{display:inline-flex!important;flex:0 0 auto!important;width:auto!important;min-width:0!important;max-width:100%;min-height:0!important;height:auto!important;margin:0!important;padding:5px 9px!important;gap:7px!important;border:1px solid var(--line)!important;border-radius:7px!important;background:transparent!important;font-size:12px!important;font-weight:500!important;line-height:1.25!important}
+.hg-plan-panel .hg-cad-view input[type="checkbox"]{appearance:checkbox!important;-webkit-appearance:checkbox!important;display:inline-block!important;flex:0 0 15px!important;width:15px!important;height:15px!important;min-width:15px!important;min-height:15px!important;max-width:15px!important;max-height:15px!important;margin:0!important;padding:0!important;vertical-align:middle!important;border-radius:3px!important;accent-color:var(--gold)!important}
+.hg-plan-panel .hg-cad-view span{display:inline!important;flex:0 1 auto!important;width:auto!important;font-size:12px!important;line-height:1.25!important;white-space:nowrap!important;word-break:normal!important}
+@media(max-width:520px){.hg-plan-panel .hg-cad-views{gap:7px!important}.hg-plan-panel .hg-cad-view{padding:7px 9px!important}.hg-plan-panel .hg-cad-view span{font-size:12px!important}}
+
 @media(max-width:699px){.hg-plan-panel details{padding:12px}.hg-plan-panel button{font-size:13px}.hg-plan-panel h3{margin-top:18px}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>

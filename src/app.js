@@ -133,6 +133,14 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <img id="hgCadPreview" alt="Ảnh tham chiếu CAD" style="display:block;max-width:100%;max-height:440px;object-fit:contain;margin:auto" />
 <p id="hgCadImageMeta" style="font-size:12px;margin:8px 0"></p>
 </div>
+<section class="hg-cad-reference-sheet" aria-label="Bảng trình bày ảnh tham chiếu và hình chiếu">
+<div class="hg-cad-sheet-head"><div><strong>HOANGGIA INTERIOR CAD AI / BẢNG THAM CHIẾU</strong><p style="font-size:12px;margin:4px 0">Giữ ảnh diễn họa gốc bên cạnh các hình chiếu. Không thay ảnh bằng khung bao.</p></div><span style="font-size:11px;color:var(--gold2)">BẢN THAM CHIẾU — KHÔNG PHẢI BẢN VẼ THI CÔNG</span></div>
+<div class="hg-cad-sheet-grid">
+<div class="hg-cad-sheet-source"><strong>01 / Ảnh sản phẩm gốc</strong><img id="hgCadSheetImage" alt="Ảnh tham chiếu sản phẩm giữ nguyên" hidden><p id="hgCadSheetPlaceholder">Tải ảnh tham chiếu để hiển thị hình diễn họa tại đây.</p></div>
+<div class="hg-cad-sheet-info"><strong>02 / Dữ liệu sản phẩm</strong><p id="hgCadSheetObject">Đối tượng: chưa xác định</p><p id="hgCadSheetDims">Kích thước: chưa xác nhận</p><p id="hgCadSheetSource">Nguồn số đo: chưa xác nhận</p><p style="color:var(--gold2);font-size:12px">Ảnh tham chiếu không tự tạo đường nét CAD.</p></div>
+</div>
+<div class="hg-cad-sheet-views"><strong>03 / Các hình chiếu</strong><div id="hgCadSheetViews">Chưa có đường nét được số hóa. TOP / FRONT / BACK / LEFT / RIGHT / SECTION cần dữ liệu hình học riêng.</div></div>
+</section>
 <label>Ghi chú bổ sung và kích thước đã xác minh<textarea id="hgCadNotes" rows="3" placeholder="Mô tả đối tượng, nguồn kích thước, bộ phận khuất, thông số xác nhận..."></textarea></label>
 <details open style="margin:16px 0"><summary><strong>BỘ DỰNG BẢN VẼ ĐỒ NỘI THẤT RỜI — Số hóa đường bao thành DXF</strong></summary>
 <p style="font-size:13px">Chọn ảnh JPG/PNG ở trên, bấm lần lượt các điểm trên đường bao sản phẩm. Đặt kích thước chuẩn cho đoạn hiệu chuẩn bằng hai điểm. Công cụ tạo DXF vector 2D thật từ các điểm do người dùng xác nhận; không tự nhận diện ảnh, không suy diễn các hình chiếu khuất.</p>
@@ -204,6 +212,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
  .hg-cad-dim-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.hg-cad-dim-grid label{min-width:0}.hg-cad-dimensions{grid-column:1/-1}@media(max-width:560px){.hg-cad-dim-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hg-cad-dim-grid label:last-child{grid-column:1/-1}}
 .hg-plan-panel .hg-cad-setting{min-width:0;border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:12px}.hg-plan-panel .hg-cad-help{font-size:12px;line-height:1.55;color:var(--muted);margin:9px 0 0;min-height:54px}@media(max-width:650px){.hg-plan-panel .hg-cad-help{min-height:0}}
 .hg-cad-export-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.hg-cad-export-grid>div{min-width:0;padding:12px;border:1px solid var(--line);border-radius:10px}@media(max-width:740px){.hg-cad-export-grid{grid-template-columns:1fr}}
+.hg-cad-reference-sheet{margin:16px 0;padding:clamp(12px,2vw,20px);border:1px solid var(--line);border-radius:14px;background:var(--panel2);min-width:0}.hg-cad-sheet-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:start;margin-bottom:14px}.hg-cad-sheet-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:12px}.hg-cad-sheet-source,.hg-cad-sheet-info,.hg-cad-sheet-views{border:1px solid var(--line);border-radius:10px;padding:12px;min-width:0}.hg-cad-sheet-source img{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;margin-top:10px}.hg-cad-sheet-source img[hidden]{display:none}.hg-cad-sheet-info p{font-size:13px;line-height:1.5;overflow-wrap:anywhere}.hg-cad-sheet-views{margin-top:12px}.hg-cad-sheet-views #hgCadSheetViews{font-size:12px;line-height:1.6;color:var(--muted);margin-top:8px}@media(max-width:680px){.hg-cad-sheet-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 <h3>Các hình chiếu cần triển khai</h3>
 <p style="font-size:13px;margin:6px 0">Chọn những hình chiếu cần phân tích. Hình chiếu thiếu dữ liệu sẽ được đánh dấu cần xác nhận.</p>
@@ -302,6 +311,23 @@ im.onload=()=>{traceImage=im;const scale=Math.min(1,1200/im.naturalWidth,900/im.
 im.onerror=()=>{traceStatus("Không thể đọc ảnh.");URL.revokeObjectURL(url);};im.src=url;
 }
 get("hgCadFile").addEventListener("change",traceLoad);
+let hgSheetUrl=null;
+function hgUpdateReferenceSheet(){
+const f=get("hgCadFile").files[0],img=get("hgCadSheetImage");
+if(hgSheetUrl){URL.revokeObjectURL(hgSheetUrl);hgSheetUrl=null;}
+if(f&&f.type.startsWith("image/")){hgSheetUrl=URL.createObjectURL(f);img.src=hgSheetUrl;img.hidden=false;get("hgCadSheetPlaceholder").hidden=true;}
+else{img.removeAttribute("src");img.hidden=true;get("hgCadSheetPlaceholder").hidden=false;get("hgCadSheetPlaceholder").textContent=f?"Tệp đã chọn không phải ảnh hiển thị trực tiếp.":"Tải ảnh tham chiếu để hiển thị hình diễn họa tại đây.";}
+hgUpdateSheetDetails();
+}
+function hgUpdateSheetDetails(){
+const obj=get("hgCadObject");get("hgCadSheetObject").textContent="Đối tượng: "+(obj.value==="custom"?(val("hgCadCustomName").trim()||"Chưa nhập tên"):obj.selectedOptions[0].text);
+get("hgCadSheetDims").textContent="Kích thước (mm): "+[["Dài",val("hgCadLength")],["Rộng/Sâu",val("hgCadDepth")],["Cao",val("hgCadHeight")]].map(([k,v])=>k+" "+(v||"chưa xác nhận")).join(" · ");
+get("hgCadSheetSource").textContent="Nguồn số đo: "+get("hgCadDimSource").selectedOptions[0].text;
+}
+get("hgCadFile").addEventListener("change",hgUpdateReferenceSheet);
+["hgCadObject","hgCadCustomName","hgCadLength","hgCadDepth","hgCadHeight","hgCadDimSource"].forEach(id=>get(id).addEventListener("input",hgUpdateSheetDetails));
+hgUpdateSheetDetails();
+
 traceCanvas.addEventListener("click",e=>{if(!traceImage)return;const rect=traceCanvas.getBoundingClientRect(),x=(e.clientX-rect.left)*traceCanvas.width/rect.width,y=(e.clientY-rect.top)*traceCanvas.height/rect.height;if(traceCalMode){if(traceCal.length===2)traceCal=[];traceCal.push([x,y]);if(traceCal.length===2)traceCalMode=false;}else tracePoints.push([x,y]);traceDraw();traceStatus("Điểm đường bao: "+tracePoints.length+" · Điểm chuẩn: "+traceCal.length+"/2");});
 get("hgTraceCalibrate").addEventListener("click",()=>{traceCal=[];traceCalMode=true;traceDraw();traceStatus("Chọn chính xác hai điểm trên ảnh có khoảng cách thực đã biết.");});
 get("hgTraceUndo").addEventListener("click",()=>{if(traceCalMode||(!tracePoints.length&&traceCal.length))traceCal.pop();else tracePoints.pop();traceDraw();});

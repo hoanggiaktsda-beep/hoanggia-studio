@@ -104,7 +104,7 @@ const expertGroups=[
 ["Sản xuất lắp ghép","George Nakashima","James Krenov","Gerrit Rietveld","Michael Thonet"],
 ["Kiểm soát chất lượng","W. Edwards Deming","Joseph M. Juran","Genichi Taguchi","Kaoru Ishikawa"]
 ];
-const routing={bed:["Piero Lissoni","Patricia Urquiola","Henry Dreyfuss","James Krenov"],stool:["Hans J. Wegner","Naoto Fukasawa","Niels Diffrient","Michael Thonet"],shelf:["Dieter Rams","Piero Lissoni","James Krenov","Gerrit Rietveld"],sofa:["Antonio Citterio","Patricia Urquiola","Niels Diffrient","Charles Eames"],chair:["Hans J. Wegner","Henry Dreyfuss","Niels Diffrient","Konstantin Grcic"],cabinet:["Dieter Rams","Piero Lissoni","James Krenov","John Pawson"],table:["Jean-Marie Massaud","Naoto Fukasawa","Gerrit Rietveld","Konstantin Grcic"],space:["Vincent Van Duysen","John Pawson","Peter Zumthor","Tadao Ando"],complex:["David Rutten","Arturo Tedeschi","Robert Aish","Achim Menges"]};
+const routing={custom:["David Rutten","Arturo Tedeschi","Dieter Rams","Henry Dreyfuss"],bed:["Piero Lissoni","Patricia Urquiola","Henry Dreyfuss","James Krenov"],stool:["Hans J. Wegner","Naoto Fukasawa","Niels Diffrient","Michael Thonet"],shelf:["Dieter Rams","Piero Lissoni","James Krenov","Gerrit Rietveld"],sofa:["Antonio Citterio","Patricia Urquiola","Niels Diffrient","Charles Eames"],chair:["Hans J. Wegner","Henry Dreyfuss","Niels Diffrient","Konstantin Grcic"],cabinet:["Dieter Rams","Piero Lissoni","James Krenov","John Pawson"],table:["Jean-Marie Massaud","Naoto Fukasawa","Gerrit Rietveld","Konstantin Grcic"],space:["Vincent Van Duysen","John Pawson","Peter Zumthor","Tadao Ando"],complex:["David Rutten","Arturo Tedeschi","Robert Aish","Achim Menges"]};
 const opt=(a)=>a.map(([v,l])=>'<option value="'+v+'">'+l+'</option>').join('');
 shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:20px auto;padding:24px">
 <span class="eyebrow">HOANGGIA AI / ĐIỀU PHỐI CHUYÊN GIA BẢN VẼ</span>
@@ -113,7 +113,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px;margin:18px 0">
 <label>Lĩnh vực chuyên môn<select id="hgCadMode">${opt([["interior","02 — AI CAD nội thất"],["cad","01 — AI bản vẽ CAD"],["shop","03 — AI bản vẽ thi công"]])}</select></label>
 <div id="hgCadModeHelp" class="notice" style="margin:10px 0 16px;font-size:13px;line-height:1.6" role="status" aria-live="polite"></div>
-<label>Đối tượng cần triển khai<select id="hgCadObject">${opt([["sofa","Sofa / Ghế bành"],["bed","Giường / Giường bọc nệm"],["stool","Ghế đôn / Băng ghế"],["shelf","Kệ rời / Tủ trang trí"],["chair","Ghế ăn / Ghế làm việc / Ghế quầy bar"],["cabinet","Tủ rời / Kệ / Cụm nội thất"],["table","Bàn ăn / Bàn trà / Bàn phụ"],["space","Không gian nội thất"],["complex","Hình học phức tạp"]])}</select></label>
+<div style="min-width:0"><label for="hgCadObject">Đối tượng cần triển khai</label><select id="hgCadObject"><optgroup label="Sofa và ghế"><option value="sofa">Sofa thẳng, góc, cong, module</option><option value="chair">Ghế bành, ghế thư giãn, ghế xoay</option><option value="chair">Ghế ăn, ghế làm việc, ghế bar</option><option value="stool">Ghế đôn, ghế dài, ottoman</option></optgroup><optgroup label="Các loại bàn"><option value="table">Bàn trà, bàn phụ, bàn góc</option><option value="table">Bàn ăn, bàn họp, bàn làm việc</option><option value="table">Bàn trang điểm, bàn console</option><option value="complex">Bàn gấp, bàn nâng hạ, bàn biến hình</option></optgroup><optgroup label="Phòng ngủ"><option value="bed">Giường ngủ, giường bọc nệm</option><option value="bed">Giường tầng, giường gấp, giường kéo</option><option value="cabinet">Tủ đầu giường, tủ ngăn kéo</option></optgroup><optgroup label="Tủ và kệ"><option value="cabinet">Tủ quần áo rời, tủ trang trí</option><option value="shelf">Kệ sách, kệ trưng bày, kệ module</option><option value="cabinet">Tủ TV, tủ thấp, tủ rượu, tủ giày</option></optgroup><optgroup label="Khác"><option value="complex">Nội thất có cơ cấu đặc biệt</option><option value="space">Không gian nội thất</option><option value="custom">Khác — Tự nhập tên sản phẩm</option></optgroup></select><div id="hgCadCustomWrap" hidden style="margin-top:10px"><label for="hgCadCustomName">Tên sản phẩm tự nhập</label><input id="hgCadCustomName" type="text" maxlength="120" placeholder="Ví dụ: Ghế massage, bàn bi-a, tủ cigar" autocomplete="off"></div></div>
 <label>Loại nguồn<select id="hgCadSource">${opt([["render","Ảnh diễn họa / Mô hình 3D"],["photo","Ảnh chụp thực tế"],["drawing","Bản vẽ / PDF"],["cad","Tệp bản vẽ CAD"]])}</select></label>
 <label>Kích thước chuẩn (mm)<input id="hgCadSize" placeholder="Dài 900 × Sâu 450 × Cao 800" autocomplete="off"></label>
 <label>Quy ước chiếu<select id="hgCadProjection">${opt([["unconfirmed","Chưa xác nhận"],["first","Góc chiếu thứ nhất"],["third","Góc chiếu thứ ba"]])}</select></label>
@@ -169,7 +169,7 @@ shell(head+`<section class="panel hg-plan-panel" style="max-width:1100px;margin:
 </section>`);
 const get=id=>document.getElementById(id), val=id=>get(id).value;
 const modeHelp={cad:"<strong>01 — AI bản vẽ CAD:</strong> Dùng khi cần phân tích mặt bằng, bản vẽ 2D, bố trí không gian, hệ trục, kích thước và các hình chiếu. Kết quả hướng đến hồ sơ CAD có cấu trúc, không phải bản vẽ thi công tự động.",interior:"<strong>02 — AI CAD nội thất:</strong> Dùng để phân tích và tái dựng đồ nội thất rời như sofa, ghế, bàn, giường, tủ, kệ và đôn. Ưu tiên đường bao, hình chiếu, kích thước, đường cong và tính đồng bộ giữa các mặt.",shop:"<strong>03 — AI bản vẽ thi công:</strong> Dùng khi cần rà soát cấu tạo, vật liệu, liên kết, chi tiết lắp ráp và kích thước phục vụ sản xuất, thi công. Phần không nhìn thấy hoặc chưa có dữ liệu phải ghi rõ cần xác nhận; không tự tạo chi tiết."};
-function updateRouting(){get("hgCadModeHelp").innerHTML=modeHelp[val("hgCadMode")];const people=routing[val("hgCadObject")];get("hgCadRouting").textContent="Chủ đạo: "+people[0]+" · Hỗ trợ: "+people.slice(1).join(" · ");}
+function updateRouting(){get("hgCadModeHelp").innerHTML=modeHelp[val("hgCadMode")];const people=routing[val("hgCadObject")]||routing.custom;get("hgCadRouting").textContent="Chủ đạo: "+people[0]+" · Hỗ trợ: "+people.slice(1).join(" · ");}
 function build(){
 const views=[...document.querySelectorAll("[data-hg-view]:checked")].map(x=>x.dataset.hgView);
 const people=routing[val("hgCadObject")];
@@ -177,7 +177,7 @@ const file=get("hgCadFile").files[0];
 const size=val("hgCadSize").trim(),notes=val("hgCadNotes").trim();
 const lines=[
 "HOANGGIA INTERIOR CAD AI — ĐẶC TẢ KỸ THUẬT",
-"Chuyên gia: "+val("hgCadMode"),"Đối tượng: "+val("hgCadObject"),
+"Chuyên gia: "+val("hgCadMode"),"Đối tượng: "+(val("hgCadObject")==="custom"?(val("hgCadCustomName").trim()||"CHƯA NHẬP TÊN SẢN PHẨM"):get("hgCadObject").selectedOptions[0].text),
 "Nguồn: "+val("hgCadSource"),"Tệp nguồn: "+(file?file.name:"CHƯA CUNG CẤP"),
 "Kích thước: "+(size||"CẦN XÁC NHẬN"),"Đơn vị: mm",
 "Quy ước chiếu: "+val("hgCadProjection"),"Phạm vi: "+val("hgCadScope"),
@@ -198,7 +198,7 @@ const lines=[
 get("hgCadPrompt").value=lines.join("\n");
 get("hgCadMessage").textContent=size?"Đã tạo hướng dẫn kỹ thuật; cần kiểm chứng kích thước với nguồn.":"Đã tạo hướng dẫn kỹ thuật; chưa có kích thước chuẩn để dựng CAD chính xác.";
 }
-get("hgCadObject").addEventListener("change",()=>{updateRouting();build()});
+get("hgCadObject").addEventListener("change",()=>{get("hgCadCustomWrap").hidden=val("hgCadObject")!=="custom";updateRouting();build()});get("hgCadCustomName").addEventListener("input",build);
 ["hgCadSource","hgCadSize","hgCadProjection","hgCadScope","hgCadNotes"].forEach(id=>get(id).addEventListener("change",build));
 get("hgCadMode").addEventListener("change",()=>{updateRouting();build()});
 document.querySelectorAll("[data-hg-view]").forEach(el=>el.addEventListener("change",build));

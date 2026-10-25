@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101411"><meta name="description" content="HOANGGIA STUDIO — nền tảng trí tuệ thiết kế kiến trúc, nội thất và sáng tạo hình ảnh"><title>HOANGGIA STUDIO — Trí tuệ thiết kế</title><link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=4.4.8"></head>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101411"><meta name="description" content="HOANGGIA STUDIO — nền tảng trí tuệ thiết kế kiến trúc, nội thất và sáng tạo hình ảnh"><title>HOANGGIA STUDIO — Trí tuệ thiết kế</title><link rel="icon" href="./assets/icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=4.9.0"></head>
 <body>
 <div class="app">
 <aside class="side" aria-label="Điều hướng chính">
@@ -11,14 +11,14 @@
 <button data-route="intelligence"><span class="ni">✳</span> Trí tuệ AI</button>
 <button data-route="library"><span class="ni">▤</span> Thư viện</button>
 <button data-route="projects"><span class="ni">▧</span> Dự án</button>
-<button data-route="system"><span class="ni">⌘</span> Hệ thống</button></nav>
+<button data-route="system"><span class="ni">⌘</span> Hệ thống</button><a class="hg-status-link" href="./system-status.html"><span class="ni">◎</span> Trạng thái công cụ ↗</a></nav>
 <div class="side-bottom"><span class="status-dot"></span><span>Lưu tại thiết bị · Không cần khóa truy cập</span><small id="sideVersion">v3.0</small></div></aside>
 <div class="frame"><header class="topbar">
 <div class="breadcrumb"><span class="overline">KHÔNG GIAN LÀM VIỆC /</span><strong id="crumb">TỔNG QUAN</strong></div>
 <div class="top-actions"><span class="storage-tag" title="Dự án lưu trên trình duyệt này">◉ Lưu cục bộ</span><select id="projectSelect" aria-label="Dự án hiện tại"></select><button class="btn btn-gold" id="newProject" type="button">＋ Dự án mới</button></div>
 </header><div class="music-toolbar"><aside class="music-dock" id="musicDock" aria-label="Nghe nhạc YouTube"><button id="musicToggle" class="music-toggle" type="button" aria-expanded="false" aria-controls="musicPanel">♫ Nhạc YouTube</button><div class="music-panel" id="musicPanel" hidden><label for="musicUrl">Dán liên kết video hoặc danh sách phát YouTube</label><div class="music-input-row"><input id="musicUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"><button id="musicPlay" type="button">Phát</button></div><p id="musicMessage" role="status">Chỉ phát nội dung YouTube cho phép nhúng. Nhạc tiếp tục khi chuyển mục trong Studio.</p><div id="musicFrame"></div><div class="music-input-row"><a id="musicExternal" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Mở YouTube ↗</a><button id="musicStop" type="button">Dừng nhạc</button></div></div></aside></div><main id="view" tabindex="-1" aria-live="polite"></main>
 <footer class="foot"><span>HOANGGIA STUDIO © 2026</span><span>Tư duy có cơ sở. Thiết kế có mục đích. Diễn họa có kiểm soát.</span><span id="footerStatus">Tất cả dữ liệu dự án nằm trong trình duyệt</span></footer></div>
-<nav class="mobile-nav" aria-label="Điều hướng di động"><button data-route="home">⌂<small>Tổng quan</small></button><button data-route="creative">◈<small>Sáng tạo</small></button><a href="./script-ai.html" aria-label="Mở Script AI" style="color:#e2c38e;text-align:center;font-size:19px;min-width:55px;text-decoration:none">▣<small style="display:block;font-size:10px">Script AI</small></a><button data-route="intelligence">✳<small>Trí tuệ</small></button><button data-route="library">▤<small>Thư viện</small></button><button data-route="projects">▧<small>Dự án</small></button><button data-route="system">⌘<small>Hệ thống</small></button></nav>
+<nav class="mobile-nav" aria-label="Điều hướng di động"><button data-route="home">⌂<small>Tổng quan</small></button><button data-route="creative">◈<small>Sáng tạo</small></button><a href="./script-ai.html" aria-label="Mở Script AI" style="color:#e2c38e;text-align:center;font-size:19px;min-width:55px;text-decoration:none">▣<small style="display:block;font-size:10px">Script AI</small></a><button data-route="intelligence">✳<small>Trí tuệ</small></button><button data-route="library">▤<small>Thư viện</small></button><button data-route="projects">▧<small>Dự án</small></button><button data-route="system">⌘<small>Hệ thống</small></button><a class="hg-mobile-status" href="./system-status.html" aria-label="Trạng thái hệ thống">◎<small>Trạng thái</small></a></nav>
 </div><div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script>
 /* Chuyển thẳng Design AI đến DA Studio, kể cả khi còn giao diện cũ trong bộ nhớ. */
@@ -28,4 +28,4 @@ document.addEventListener("click",function(e){
  e.preventDefault();e.stopImmediatePropagation();
  location.assign("https://hoanggiaktsda-beep.github.io/da-studio/");
 },true);
-</script><script type="module" src="./src/app.js?v=4.4.8"></script><script defer src="./src/mo-chat.js"></script><script defer src="./src/youtube-music.js"></script></body></html>
+</script><script type="module" src="./src/app.js?v=4.9.0"></script><script defer src="./src/mo-chat.js"></script><script defer src="./src/youtube-music.js"></script></body></html>

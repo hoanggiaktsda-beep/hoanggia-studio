@@ -1,0 +1,5 @@
+import test from "node:test";import assert from "node:assert/strict";import {readFileSync} from "node:fs";const read=p=>readFileSync(new URL("../"+p,import.meta.url),"utf8");
+test("desktop and mobile have status route",()=>{const h=read("index.html");assert.match(h,/class="hg-status-link"/);assert.match(h,/class="hg-mobile-status"/);assert.match(h,/href="\.\/system-status\.html"/)});
+test("PWA stores status page in current cache",()=>{const sw=read("sw.js");assert.match(sw,/hoanggia-studio-v4\.9\.0/);assert.match(sw,/"\.\/system-status\.html"/);assert.doesNotMatch(sw,/c\.put\("\.\/index\.html",copy\)/)});
+test("dashboard reports network reachability, not AI readiness",()=>{const h=read("system-status.html");assert.match(h,/Không xác định · CORS\/mạng/);assert.match(h,/không chứng minh AI/);assert.match(h,/fetch\(u,/);assert.match(h,/MODULES/)});
+test("responsive layouts exist for desktop, tablet and mobile",()=>{const css=read("styles.css");assert.match(css,/max-width:1180px/);assert.match(css,/max-width:760px/);assert.match(css,/max-width:420px/)});

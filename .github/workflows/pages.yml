@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: "22"
       - name: Validate core behavior and JavaScript syntax before publishing
-        run: node --test tests/core.test.mjs && node --check src/app.js && node --check src/core.js && node --check src/design-brain.js && node --check src/intelligence-core.js && node --check design-ai/app.mjs && node --check design-ai/core.mjs && node --check design-ai/design-catalog.mjs && node --check design-ai/image-advisor.mjs
+        run: node --test tests/core.test.mjs tests/prompt-library.test.mjs && node --check src/prompts-category-05.js && node --check src/prompts-category-06.js && node --check src/prompts-category-07.js && node --check src/prompts-category-05-adapter.js && node --check src/app.js && node --check src/core.js && node --check src/design-brain.js && node --check src/intelligence-core.js && node --check design-ai/app.mjs && node --check design-ai/core.mjs && node --check design-ai/design-catalog.mjs && node --check design-ai/image-advisor.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -5,6 +5,7 @@ export const VERSION="3.0.0";
 export const MODULES=[
 {id:"design",label:"Design AI",vi:"Thiết kế không gian",group:"creative",icon:"◈",status:"local",repo:"https://github.com/hoanggiaktsda-beep/da-studio",live:"https://hoanggiaktsda-beep.github.io/da-studio/",detail:"Biên soạn định hướng kiến trúc, nội thất, quy hoạch, cảnh quan"},
 {id:"edit",label:"Edit AI",vi:"Chỉnh sửa & đồng bộ",group:"creative",icon:"▧",status:"local",repo:"https://github.com/hoanggiaktsda-beep/hoanggia-studioai",live:"https://hoanggiaktsda-beep.github.io/hoanggia-studioai/",detail:"ReferenceReplica, SpaceSync, khóa kiến trúc và góc máy"},
+{id:"script",label:"Script AI",vi:"Xưởng kịch bản",group:"creative",icon:"▣",status:"limited",detail:"Phân tích cấu trúc kịch bản, chuyển sản phẩm và biên tập lời thoại qua prompt AI"},
 {id:"video",label:"Video AI",vi:"Kịch bản & camera",group:"creative",icon:"▷",status:"local",repo:"https://github.com/hoanggiaktsda-beep/prompt-ai-videos",live:"https://hoanggiaktsda-beep.github.io/prompt-ai-videos/",detail:"Shot sequence, nhân vật, ánh sáng và chuyển động"},
 {id:"upscale",label:"Upscale AI",vi:"Nâng cấp ảnh",group:"creative",icon:"⬡",status:"local",repo:"https://github.com/hoanggiaktsda-beep/HG-UPSCALE-AI",live:"https://hoanggiaktsda-beep.github.io/HG-UPSCALE-AI/",detail:"Phóng ảnh trên trình duyệt, không tự nhận là AI siêu phân giải"},
 {id:"visual",label:"Visual AI",vi:"Trực quan hóa",group:"creative",icon:"◇",status:"local",detail:"Danh mục liên kết tới các nền tảng tạo ảnh độc lập"},

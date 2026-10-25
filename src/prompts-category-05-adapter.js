@@ -1,7 +1,7 @@
-/* HOANGGIA Studio - Categories 05 & 06 native prompt selectors */
+/* HOANGGIA Studio - Categories 05, 06 & 07 native prompt selectors */
 (()=>{
 "use strict";
-const groups={"4":"HOANGGIA_PROMPT_05","5":"HOANGGIA_PROMPT_06"};
+const groups={"4":"HOANGGIA_PROMPT_05","5":"HOANGGIA_PROMPT_06","6":"HOANGGIA_PROMPT_07"};
 const el=id=>document.getElementById(id);
 function data(){return window[groups[el("promptCategorySelect")?.value]]}
 function choose(){const list=data(),i=Number(el("promptTemplateSelect")?.value||0),editor=el("promptTemplateText");if(editor&&list?.[i])editor.value=list[i][1]}
